@@ -2,7 +2,7 @@
 title: marimo + quarto
 format: html
 filters:
-  - marimo/quarto
+  - marimo
 ---
 
 # 🟢 🔵 🏝️
@@ -16,8 +16,6 @@ reactive in page.
 
 ```{.python.marimo}
 #| echo: true
-# Woops, I think I inverted the default such that every editor cell is runnable.
-# See last cell for bug
 mo.md('''
   # Hello from marimo!
 

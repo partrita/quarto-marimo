@@ -1,21 +1,18 @@
 ---
 title: Fileformat
-marimo-version: 0.5.2
-format: html
-filters:
-  - marimo/quarto
+marimo-version: 0.12.9
 ---
 
-```{.python.marimo hide_code="true"}
+```python {.marimo hide_code="true"}
 mo.md(intro)
 ```
 
-```{.python.marimo hide_code="true"}
+```python {.marimo hide_code="true"}
 mo.accordion(
     {
         "Tip: hide this tutorial's code": (
         """
-        Click the app window icon in the bottom-left to hide this app's code,
+        Click the app window icon in the bottom-right to hide this app's code,
         or use the "fold code" shortcut to fold all code cells.
         """
         )
@@ -23,11 +20,11 @@ mo.accordion(
 )
 ```
 
-```{.python.marimo hide_code="true"}
+```python {.marimo hide_code="true"}
 mo.md(example_program)
 ```
 
-```{.python.marimo hide_code="true"}
+```python {.marimo hide_code="true"}
 mo.md(file_contents)
 ```
 
@@ -40,11 +37,11 @@ editor, and format the file with your favorite code formatter.
 
 We explain some properties of marimo's file format below.
 
-```{.python.marimo hide_code="true"}
+```python {.marimo hide_code="true"}
 mo.accordion(properties)
 ```
 
-```{.python.marimo hide_code="true"}
+```python {.marimo hide_code="true"}
 intro = """
 # File Format
 
@@ -59,7 +56,7 @@ These files are:
 """
 ```
 
-````{.python.marimo hide_code="true"}
+````python {.marimo hide_code="true"}
 file_contents = f"""
     For the above example, marimo would generate the following file 
     contents:
@@ -97,7 +94,7 @@ file_contents = f"""
 """
 ````
 
-````{.python.marimo hide_code="true"}
+````python {.marimo hide_code="true"}
 example_program = """
 ## Example
 
@@ -121,7 +118,7 @@ import marimo as mo
 """
 ````
 
-````{.python.marimo hide_code="true"}
+````python {.marimo hide_code="true"}
 properties = {
     "Cells are functions": """
     In the `dataflow` tutorial, we saw that cells are like functions mapping 
@@ -171,7 +168,7 @@ properties = {
     the generated code. For example, whitespace, line breaks, and so on are
     all preserved exactly. This means that you can touch up formatting in
     your text editor, either manually or using automated formatters like 
-    Black, and be confident that your changes will be preserved.
+    Ruff, and be confident that your changes will be preserved.
     """,
     "Cell functions can have names": """
     If you want to, you can replace the default names for cell functions 
@@ -224,6 +221,6 @@ properties = {
 }
 ````
 
-```{.python.marimo}
+```python {.marimo}
 import marimo as mo
 ```

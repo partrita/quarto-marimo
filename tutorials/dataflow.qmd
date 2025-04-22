@@ -1,9 +1,8 @@
+This notebook has inlined package dependencies.
+Run in a sandboxed venv containing this notebook's dependencies? [Y/n]: Running in a sandbox: uv run --isolated --no-project --with-requirements /tmp/tmpmrcnevdx.txt --python >=3.12 marimo export md /Users/dylan/src/quarto-marimo/.pixi/envs/default/lib/python3.13/site-packages/marimo/_tutorials/dataflow.py
 ---
 title: Dataflow
-marimo-version: 0.5.2
-format: html
-filters:
-  - marimo/quarto
+marimo-version: 0.12.9
 ---
 
 # How marimo notebooks run
@@ -14,6 +13,18 @@ automatically.
 
 To provide reactive execution, marimo creates a dataflow graph out of your
 cells.
+<!---->
+**Tip: disabling automatic execution.**
+
+marimo lets you disable automatic execution: just go into the notebook settings
+and set
+
+"Runtime > On Cell Change" to "lazy".
+
+When the runtime is lazy, after running a cell, marimo marks its
+descendants as stale instead of automatically running them. The lazy
+runtime puts you in control over when cells are run, while still giving
+guarantees about the notebook state.
 <!---->
 ## References and definitions
 
@@ -35,7 +46,7 @@ a cell is run, its descendants are run automatically.
 The next four cells plot a sine wave with a given period and amplitude.
 Each cell is labeled with its refs and defs.
 
-```{.python.marimo hide_code="true"}
+```python {.marimo hide_code="true"}
 mo.accordion(
     {
         "Tip: inspecting refs and defs": f"""
@@ -50,7 +61,7 @@ mo.accordion(
 )
 ```
 
-```{.python.marimo}
+```python {.marimo}
 mo.md(
     f"""
     {mo.as_html(plot_wave(amplitude, period))}
@@ -61,7 +72,7 @@ mo.md(
 )
 ```
 
-```{.python.marimo}
+```python {.marimo}
 period = 2 * 3.14159
 
 mo.md(
@@ -72,7 +83,7 @@ mo.md(
 )
 ```
 
-```{.python.marimo}
+```python {.marimo}
 amplitude = 1
 
 mo.md(
@@ -83,16 +94,8 @@ mo.md(
 )
 ```
 
-```{.python.marimo}
+```python {.marimo}
 def plot_wave(amplitude, period):
-    if not numpy_installed:
-        return mo.md(
-            "> Oops! It looks like you don't have `numpy` installed."
-        )
-    if not matplotlib_installed:
-        return mo.md(
-            "> Oops! It looks like you don't have `matplotlib` installed."
-        )
     x = np.linspace(0, 2 * np.pi, 256)
     plt.plot(x, amplitude * np.sin(2 * np.pi / period * x))
     plt.xlim(0, 2 * np.pi)
@@ -161,12 +164,12 @@ execute cells in.
 If you violate this constraint, marimo provides a helpful
 error message, like below:
 
-```{.python.marimo}
+```python {.marimo}
 planet = "Mars"
 planet
 ```
 
-```{.python.marimo}
+```python {.marimo}
 planet = "Earth"
 planet
 ```
@@ -181,11 +184,11 @@ them; these operators count as redefinitions of a name.
 **🌊 Try it!** Get rid of the following errors by merging the next two
 cells into a single cell.
 
-```{.python.marimo}
+```python {.marimo}
 count = 0
 ```
 
-```{.python.marimo}
+```python {.marimo}
 count += 1
 ```
 
@@ -198,17 +201,17 @@ made available to other cells.
 
 **Example**.
 
-```{.python.marimo}
+```python {.marimo}
 _private_variable, _ = 1, 2
 _private_variable, _
 ```
 
-```{.python.marimo}
+```python {.marimo}
 _private_variable, _ = 3, 4
 _private_variable, _
 ```
 
-```{.python.marimo}
+```python {.marimo}
 # `_private_variable` and `_` are not defined in this cell
 _private_variable, _
 ```
@@ -220,7 +223,7 @@ then runs all cells that reference them. This prevents severe bugs that
 can arise when state has been deleted from the editor but not from the
 program memory.
 
-```{.python.marimo}
+```python {.marimo}
 to_be_deleted = "variable still exists"
 
 mo.md(
@@ -232,7 +235,7 @@ mo.md(
 )
 ```
 
-```{.python.marimo}
+```python {.marimo}
 to_be_deleted
 ```
 
@@ -240,11 +243,11 @@ to_be_deleted
 
 Cycles among cells are not allowed. For example:
 
-```{.python.marimo}
+```python {.marimo}
 one = two - 1
 ```
 
-```{.python.marimo}
+```python {.marimo}
 two = one + 1
 ```
 
@@ -256,15 +259,15 @@ trigger reactive execution.
 **🌊 Example**. Change the value of `state.number` in the next cell, then
 run the cell. Notice how the subsequent cell isn't updated.
 
-```{.python.marimo}
+```python {.marimo}
 state.number = 1
 ```
 
-```{.python.marimo}
+```python {.marimo}
 state.number
 ```
 
-```{.python.marimo}
+```python {.marimo}
 class namespace:
     pass
 
@@ -272,12 +275,12 @@ state = namespace()
 state.number = 0
 ```
 
-```{.python.marimo hide_code="true"}
+```python {.marimo hide_code="true"}
 mo.accordion(
     {
         "Why not track attributes?": """
-        marimo can't reliably trace attributes
-        to cells that define them. For example, attributes are routinely
+        marimo can't reliably trace attributes 
+        to cells that define them. For example, attributes are routinely 
         created or modified by library code.
         """
     }
@@ -290,12 +293,12 @@ In Python, it's impossible to know whether code will
 mutate an object without running it. So: mutations (such as
 appending to a list) will not trigger reactive execution.
 
-```{.python.marimo hide_code="true"}
+```python {.marimo hide_code="true"}
 mo.accordion(
     {
         "Tip (advanced): mutable state": (
             """
-        You can use the fact that marimo does not track attributes or
+        You can use the fact that marimo does not track attributes or 
         mutations to implement mutable state in marimo. An example of
         this is shown in the `ui` tutorial.
         """
@@ -316,7 +319,7 @@ and apps, and they'll encourage you to write clean, reproducible code.
 
 Follow these tips to stay on the marimo way:
 
-```{.python.marimo}
+```python {.marimo}
 mo.accordion(tips)
 ```
 
@@ -328,33 +331,19 @@ Check out the tutorial on interactivity for a tour of UI elements:
 marimo tutorial ui
 ```
 
-```{.python.marimo hide_code="true"}
-matplotlib_installed = False
-numpy_installed = False
-
-try:
-    import matplotlib.pyplot as plt
-
-    matplotlib_installed = True
-except ModuleNotFoundError:
-    pass
-
-try:
-    import numpy as np
-
-    numpy_installed = True
-except ModuleNotFoundError:
-    pass
+```python {.marimo}
+import matplotlib.pyplot as plt
+import numpy as np
 ```
 
-````{.python.marimo hide_code="true"}
+````python {.marimo hide_code="true"}
 tips = {
     "Use global variables sparingly": (
         """
         Keep the number of global variables in your program small to avoid
-        name collisions across cells. Keep the number of global variables
+        name collisions across cells. Keep the number of global variables 
         defined by any one cell small to make sure that the units of
-        reactive execution are small.
+        reactive execution are small. 
         """
     ),
     "Use descriptive names": (
@@ -410,25 +399,25 @@ tips = {
         """
     ),
     "Write idempotent cells": (
-        """
+        """  
         Write cells whose outputs and behavior are the same when given
         the same inputs (refs); such cells are called _idempotent_. This will
         help you avoid bugs, and let you cache expensive intermediate
         computations (see the next tip).
         """
     ),
-    "Cache intermediate computations with `@functools.cache`": (
+    "Cache intermediate computations with `@mo.cache`": (
         """
-        Use Python's builtin `functools` library to cache expensive
-        intermediate computations. You can do this if you abstract complex
-        logic into idempotent functions, following earlier tips.
+        Use `mo.cache` to cache the return value of expensive functions.
+        You can do this if you abstract complex logic into idempotent
+        functions, following earlier tips.
 
         For example:
 
         ```python3
-        import functools
+        import marimo as mo
 
-        @functools.cache
+        @mo.cache
         def compute_prediction(problem_parameters):
           ...
         ```
@@ -436,13 +425,17 @@ tips = {
         Whenever `compute_predictions` is called with a value of
         `problem_parameters` it has not seen, it will compute the predictions
         and store them in a cache. The next time it is called with the same
-        parameters, instead of recomputing the predictions, it will just
+        parameters, instead of recomputing the predictions, it will just 
         fetch the previously computed ones from the cache.
+
+        If you are familiar with `functools.cache`, `mo.cache` is
+        similar but more robust, with the cache persisting even
+        if the cell defining the function is re-run.
         """
     ),
 }
 ````
 
-```{.python.marimo}
+```python {.marimo}
 import marimo as mo
 ```

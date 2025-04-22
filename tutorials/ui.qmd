@@ -1,9 +1,6 @@
 ---
 title: Ui
-marimo-version: 0.5.2
-format: html
-filters:
-  - marimo/quarto
+marimo-version: 0.12.9
 ---
 
 # UI Elements
@@ -12,9 +9,9 @@ One of marimo's most powerful features is its first-class
 support for interactive user interface (UI) elements: interacting
 with a UI element will automatically run cells that reference it.
 <!---->
-## `marimo.ui`
+## marimo.ui
 
-```{.python.marimo}
+```python {.marimo}
 slider = mo.ui.slider(start=1, stop=10, step=1)
 slider
 
@@ -27,7 +24,7 @@ mo.md(
 )
 ```
 
-```{.python.marimo}
+```python {.marimo}
 mo.md(f"and here's its value: **{slider.value}**.")
 ```
 
@@ -41,19 +38,19 @@ This simple rule lets you use UI elements to
 drive the execution of your program, letting you build
 interactive notebooks and tools for yourselves and others.
 
-```{.python.marimo hide_code="true"}
+```python {.marimo hide_code="true"}
 mo.accordion(
     {
         "Tip: assign UI elements to global variables": (
             """
-            Interacting with a displayed UI element will only
+            Interacting with a displayed UI element will only 
             trigger reactive execution if the UI element is assigned
             to a global variable.
             """
         ),
         "Tip: accessing an element's value": (
             """
-            Every UI element has a value attribute that you can access in
+            Every UI element has a value attribute that you can access in 
             Python.
             """
         ),
@@ -69,311 +66,171 @@ mo.accordion(
 ```
 
 ### Simple elements
+<!---->
+marimo has a [large library of simple UI elements](https://docs.marimo.io/api/inputs/index.html). Here are a just few examples:
 
-```{.python.marimo hide_code="true"}
+```python {.marimo hide_code="true"}
 mo.md(
-    f"""
-    marimo has a large library of simple UI elements: {basic_ui_elements}
     """
-)
+    See our [examples folder](https://github.com/marimo-team/marimo/tree/main/examples/ui) on GitHub for bite-sized notebooks showcasing all our UI elements. For
+    a more detailed reference, see our [API docs](https://docs.marimo.io/api/inputs/).
+    """
+).callout()
 ```
 
-```{.python.marimo}
+```python {.marimo}
+number = mo.ui.number(start=1, stop=10, step=1)
+number
+```
+
+```python {.marimo}
+number.value
+```
+
+```python {.marimo}
+checkbox = mo.ui.checkbox(label="checkbox")
+checkbox
+```
+
+```python {.marimo}
+checkbox.value
+```
+
+```python {.marimo}
+text = mo.ui.text(placeholder="type some text ...")
+text
+```
+
+```python {.marimo}
+text.value
+```
+
+```python {.marimo}
+text_area = mo.ui.text_area(placeholder="type some text ...")
+text_area
+```
+
+```python {.marimo}
+text_area.value
+```
+
+```python {.marimo}
+dropdown = mo.ui.dropdown(["a", "b", "c"])
+dropdown
+```
+
+```python {.marimo}
+dropdown.value
+```
+
+```python {.marimo}
+run_button = mo.ui.run_button(label="click me")
+run_button
+```
+
+```python {.marimo}
+"Run button was clicked!" if run_button.value else "Click the run button!"
+```
+
+```python {.marimo}
+file_upload = mo.ui.file(kind="area")
+file_upload
+```
+
+```python {.marimo}
+file_upload.value
+```
+
+```python {.marimo}
+mo.md(f"To see more examples, use this dropdown: {basic_ui_elements}")
+```
+
+```python {.marimo}
 selected_element = construct_element(basic_ui_elements.value)
 show_element(selected_element)
 ```
 
-```{.python.marimo}
+```python {.marimo}
 value(selected_element)
 ```
 
-```{.python.marimo}
+```python {.marimo}
 documentation(basic_ui_elements.value)
 ```
 
-```{.python.marimo hide_code="true"}
-mo.md(
-    f"""### Composite elements
+### Composite elements
 
     Composite elements are advanced elements
     let you build UI elements out of other UI elements.
+
     Use these powerful elements to logically group together related elements,
     create a dynamic set of UI elements, or reduce the number of global
     variables in your program.
+<!---->
+This first example shows how to create an array of UI elements using `mo.ui.array`.
+When you interact with an element in the array, all cells that reference the
+array are reactively run. If you instead used a regular Python list, cells referring to the list would _not_ be run.
 
-    Select a composite element: {composite_elements}
-    """
+```python {.marimo}
+array = mo.ui.array(
+    [mo.ui.text(), mo.ui.slider(start=1, stop=10), mo.ui.date()]
+)
+array
+```
+
+```python {.marimo}
+array.value
+```
+
+marimo also comes with `mo.ui.dictionary`, which is analogous to `mo.ui.array`
+
+```python {.marimo}
+dictionary = mo.ui.dictionary(
+    {
+        "text": mo.ui.text(),
+        "slider": mo.ui.slider(start=1, stop=10),
+        "date": mo.ui.date(),
+    }
+)
+dictionary
+```
+
+```python {.marimo}
+dictionary.value
+```
+
+```python {.marimo hide_code="true"}
+mo.md(
+    f"To see additional composite elements, use this dropdown: {composite_elements}"
 )
 ```
 
-```{.python.marimo}
+```python {.marimo}
 composite_element = construct_element(composite_elements.value)
 show_element(composite_element)
 ```
 
-```{.python.marimo}
+```python {.marimo}
 value(composite_element)
 ```
 
-```{.python.marimo}
+```python {.marimo}
 documentation(composite_elements.value)
 ```
 
-## State
+### Building custom elements
 
-```{.python.marimo hide_code="true"}
-mo.md(
-    """
-    **Heads up!**
-
-    The rest of this tutorial covers state, an advanced topic. Feel free
-    to return here later, if or when you find yourself
-    limited in building interactive stateful apps.
-    """
-).callout(kind="warn")
-```
-
-You can build powerful interactive notebooks and apps using just
-`mo.ui` and reactivity.
-
-Sometimes, however, you might want interactions to mutate **state**.
-Maybe you're building a checklist, and you want to maintain a list
-of action items. Or maybe you want to tie two different UI elements, so
-that updating one updates the other.
-
-For these and other cases, marimo provides the function `mo.state`, which
-creates state returns a getter function and a setter function. When you
-call the setter function in one cell, all other
-cells that reference the getter via a global variable are automatically
-run (similar to UI elements).
-
-```{.python.marimo}
-mo.accordion({"Documentation on `mo.state`": mo.doc(mo.state)})
-```
-
-### Creating state
-
-`mo.state` takes an initial state value as its argument, and returns
-
-- a function that returns the state value;
-- a function that updates the state value.
-
-For exaxmple,
-
-```python
-get_counter, set_counter = mo.state(0)
-```
-
-```{.python.marimo}
-get_counter, set_counter = mo.state(0)
-```
-
-```{.python.marimo hide_code="true"}
-mo.accordion(
-    {
-        "Tip: assign state getters to global variables": (
-            """
-            Calling a state's setter function will only
-            trigger reactive execution if the corresponding getter is
-            assigned to and referenced via a global variable.
-            """
-        ),
-        "Tip: use state sparingly": (
-            """
-            You can get far using just `mo.ui`, without state. That said,
-            judiciously using state can simplify the implementation of highly
-            interactive notebooks/apps, and also enables new use cases.
-            """
-        ),
-    }
-)
-```
-
-```{.python.marimo}
-mo.md(
-    f"""
-    Access the value of the state via its getter: `get_counter()`
-    returned **{get_counter()}**
-    """
-)
-```
-
-### Setting State
-
-Set an element's state by calling its setter function.
-
-- Call it with a new value: `set_counter(1)`
-- Call it with a function that takes the current value and returns a new
-  one: `set_counter(lambda count: count + 1)`
-
-**State updates are reactive.** When you call a state's setter in one
-cell, _all other cells that reference the state getter via a global
-variable_ are automatically
-run with the new state value. This is similar to how interacting with
-a UI element automatically runs all cells that use the element.
+marimo supports third-party UI elements through anywidget — this lets you build
+your own interactive UI elements, or use widgets built by others in the
+community. To learn more, [see our
+docs](https://docs.marimo.io/guides/integrating_with_marimo/custom_ui_plugins.html).
 <!---->
-**The `on_change` callback.** Every UI element takes an optional
-`on_change` callback, a function
-that takes the new value of the element and does anything with it. You can
-use the setter function in an `on_change` callback to mutate state.
-
-**🌊 Try it!** Click the button below and watch what happens.
-
-```{.python.marimo}
-increment = mo.ui.button(
-    label="increment",
-    on_change=lambda _: set_counter(lambda v: v + 1),
-)
-
-decrement = mo.ui.button(
-    label="decrement",
-    on_change=lambda _: set_counter(lambda v: v - 1),
-)
-
-mo.hstack([increment, decrement], justify="center")
-```
-
-```{.python.marimo}
-mo.md(
-    f"""
-    The counter's current value is **{get_counter()}**!
-
-    This cell runs automatically on button click, even though it
-    doesn't reference either button.
-    """
-)
-```
-
-```{.python.marimo hide_code="true"}
-mo.accordion(
-    {
-        "Tip: no self-loops": (
-            """
-            Calling a state's setter in one cell won't ever cause that same
-            cell to re-execute, even if it reads that state getter. This
-            prevents accidental infinite loops and makes some things, like
-            tying elements, easier."
-            """
-        )
-    }
-)
-```
-
-### Tied elements
-<!---->
-Use state to tie two UI elements to the same value.
-
-```{.python.marimo}
-get_shared_state, set_shared_state = mo.state(0)
-```
-
-```{.python.marimo}
-x = mo.ui.slider(
-    0,
-    10,
-    value=get_shared_state(),
-    on_change=set_shared_state,
-    label="$x$:",
-)
-```
-
-```{.python.marimo}
-x_plus_one = mo.ui.number(
-    1,
-    11,
-    value=get_shared_state() + 1,
-    on_change=lambda v: set_shared_state(v - 1),
-    label="$x + 1$:",
-)
-```
-
-```{.python.marimo}
-[x, x_plus_one]
-```
-
-```{.python.marimo hide_code="true"}
-mo.accordion(
-    {
-        "Tip: tying elements and cycles": (
-            """
-            To tie elements, you must `mo.state`, and the tied elements
-            must be created in different cells (since self-loops with state
-            are not allowed).
-            """
-        )
-    }
-)
-```
-
-### Example: Task list
-
-```{.python.marimo}
-@dataclass
-class Task:
-    name: str
-    done: bool = False
-
-get_tasks, set_tasks = mo.state([])
-task_list_mutated, set_task_list_mutated = mo.state(False)
-```
-
-```{.python.marimo}
-task_list_mutated
-
-task_entry_box = mo.ui.text(placeholder="a task ...")
-```
-
-```{.python.marimo}
-def add_task():
-    if task_entry_box.value:
-        set_tasks(lambda v: v + [Task(task_entry_box.value)])
-        set_task_list_mutated(True)
-
-def clear_tasks():
-    set_tasks(lambda v: [task for task in v if not task.done])
-    set_task_list_mutated(True)
-
-add_task_button = mo.ui.button(
-    label="add task",
-    on_change=lambda _: add_task(),
-)
-
-clear_tasks_button = mo.ui.button(
-    label="clear completed tasks", on_change=lambda _: clear_tasks()
-)
-```
-
-```{.python.marimo}
-task_list = mo.ui.array(
-    [
-        mo.ui.checkbox(value=task.done, label=task.name)
-        for task in get_tasks()
-    ],
-    label="tasks",
-    on_change=lambda v: set_tasks(
-        lambda tasks: [
-            Task(task.name, done=v[i]) for i, task in enumerate(tasks)
-        ]
-    ),
-)
-```
-
-```{.python.marimo}
-mo.hstack(
-    [task_entry_box, add_task_button, clear_tasks_button], justify="start"
-)
-```
-
-```{.python.marimo}
-mo.as_html(task_list) if task_list.value else mo.md("No tasks! 🎉")
-```
-
 ## Appendix
 The remaining cells are helper data structures and functions.
 You can look at their code if you're curious how certain parts of this
 tutorial were implemented.
 
-```{.python.marimo}
+```python {.marimo}
 composite_elements = mo.ui.dropdown(
     options=dict(
         sorted(
@@ -385,10 +242,11 @@ composite_elements = mo.ui.dropdown(
             }.items()
         )
     ),
+    allow_select_none=True
 )
 ```
 
-```{.python.marimo}
+```python {.marimo}
 basic_ui_elements = mo.ui.dropdown(
     options=dict(
         sorted(
@@ -414,7 +272,7 @@ basic_ui_elements = mo.ui.dropdown(
 )
 ```
 
-```{.python.marimo}
+```python {.marimo}
 def construct_element(value):
     if value == mo.ui.array:
         return mo.ui.array(
@@ -495,13 +353,13 @@ def construct_element(value):
     return None
 ```
 
-```{.python.marimo}
+```python {.marimo}
 def show_element(element):
     if element is not None:
-        return mo.hstack([element], "center")
+        return mo.hstack([element], justify="center")
 ```
 
-```{.python.marimo}
+```python {.marimo}
 def value(element):
     if element is not None:
         v = (
@@ -516,7 +374,7 @@ def value(element):
         )
 ```
 
-```{.python.marimo}
+```python {.marimo}
 def documentation(element):
     if element is not None:
         return mo.accordion(
@@ -528,10 +386,6 @@ def documentation(element):
         )
 ```
 
-```{.python.marimo}
-from dataclasses import dataclass
-```
-
-```{.python.marimo}
+```python {.marimo}
 import marimo as mo
 ```

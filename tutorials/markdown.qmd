@@ -1,16 +1,13 @@
+This notebook has inlined package dependencies.
+Run in a sandboxed venv containing this notebook's dependencies? [Y/n]: Running in a sandbox: uv run --isolated --no-project --with-requirements /tmp/tmpisgop8nl.txt --python >=3.12 marimo export md /Users/dylan/src/quarto-marimo/.pixi/envs/default/lib/python3.13/site-packages/marimo/_tutorials/markdown.py
 ---
 title: Markdown
-marimo-version: 0.5.2
-format: html
-filters:
-  - marimo/quarto
+marimo-version: 0.12.9
 ---
 
 # Hello, Markdown!
 
-Use marimo's "`md`" function to embed rich text into your marimo
-apps. This function compiles Markdown into HTML that marimo
-can display.
+Use marimo's "`md`" function to write markdown. This function compiles Markdown into HTML that marimo can display.
 
 For example, here's the code that rendered the above title and
 paragraph:
@@ -26,6 +23,20 @@ mo.md(
     '''
 )
 ```
+<!---->
+**Tip: toggling between the Markdown and Python editor**
+
+Although markdown is written with `mo.md`, marimo provides a markdown editor
+that hides this boilerplate from you.
+
+Toggle between the Markdown and Python
+editors by clicking the blue icon in the top-right of the editor,
+entering `Ctrl/Cmd+Shift+M`, or using the "cell actions menu". You can
+also **hide** the markdown editor through the cell actions menu.
+
+**Tip**: To interpolate Python values into markdown strings, you'll
+need to use `mo.md(f"...")` directly; the markdown view does not support
+f-strings.
 <!---->
 ## LaTeX
 You can embed LaTeX in Markdown.
@@ -54,12 +65,27 @@ renders the display math
 f: \mathbf{R} \to \mathbf{R}.
 \]
 
-```{.python.marimo hide_code="true"}
+```python {.marimo hide_code="true"}
 mo.accordion(
     {
         "Tip: `r''` strings": mo.md(
             "Use `r''` strings to remove the need to escape backslashes"
             " when writing LaTeX."
+        )
+    }
+)
+```
+
+```python {.marimo hide_code="true"}
+mo.accordion(
+    {
+        "Note: KaTeX": mo.md(
+            """
+            marimo actually uses KaTeX, a math typesetting library for the
+            web which supports a subset of LaTeX. For a list of
+            (un)supported commands, visit
+            https://katex.org/docs/support_table
+            """
         )
     }
 )
@@ -73,16 +99,11 @@ markdown whose contents depend on data that changes at runtime.
 
 Here are some examples.
 
-````{.python.marimo hide_code="true"}
+````python {.marimo}
 def _sine_plot():
-    if not numpy_installed:
-        return missing_numpy_msg
-    if not matplotlib_installed:
-        return missing_matplotlib_msg
     _x = np.linspace(start=0, stop=2 * np.pi)
     plt.plot(_x, np.sin(_x))
     return plt.gca()
-
 
 mo.md(
     f"""
@@ -101,7 +122,7 @@ mo.md(
 )
 ````
 
-````{.python.marimo hide_code="true"}
+````python {.marimo}
 leaves = mo.ui.slider(1, 32, label="🍃: ")
 
 mo.md(
@@ -122,35 +143,28 @@ mo.md(
 )
 ````
 
-```{.python.marimo}
+```python {.marimo}
 mo.md(f"Your leaves: {'🍃' * leaves.value}")
 ```
 
-```{.python.marimo hide_code="true"}
+```python {.marimo hide_code="true"}
 mo.accordion(
     {
         "Tip: UI elements can format themselves": """
-        marimo objects know how to format themselves, so you can omit the 
+        marimo objects know how to format themselves, so you can omit the
         call to `as_html`.
         """
     }
 )
 ```
 
-```{.python.marimo}
+```python {.marimo}
+import polars as pl
+
 def make_dataframe():
-    try:
-        import pandas as pd
-    except ModuleNotFoundError:
-        return mo.md("Oops! Looks like you don't have `pandas` installed.")
-
-    if not numpy_installed:
-        return missing_numpy_msg
-
     x = np.linspace(0, 2 * np.pi, 10)
     y = np.sin(x)
-    return pd.DataFrame({"x": x, "sin(x)": y})
-
+    return pl.DataFrame({"x": x, "sin(x)": y})
 
 mo.md(
     f"""
@@ -165,19 +179,19 @@ mo.md(
     - `plotly` figures, and
     - `altair` figures.
 
-    For example, here's a pandas dataframe:
+    For example, here's a Polars dataframe:
 
     {mo.as_html(make_dataframe())}
     """
 )
 ```
 
-```{.python.marimo hide_code="true"}
+```python {.marimo hide_code="true"}
 mo.accordion(
     {
         "Tip: outputs are automatically converted to HTML": """
-        `mo.as_html` is only needed when interpolating objects into 
-        markdown; the last expression of a cell (its output) is 
+        `mo.as_html` is only needed when interpolating objects into
+        markdown; the last expression of a cell (its output) is
         converted to HTML automatically.
         """
     }
@@ -190,7 +204,7 @@ Here's a more interesting example that puts together
 everything we've learned: rendering markdown with LaTeX that depends on
 the values of Python objects.
 
-```{.python.marimo}
+```python {.marimo}
 amplitude = mo.ui.slider(1, 2, step=0.1, label="amplitude: ")
 period = mo.ui.slider(
     math.pi / 4,
@@ -201,38 +215,29 @@ period = mo.ui.slider(
 )
 ```
 
-```{.python.marimo}
-import functools
-
-
-@functools.cache
+```python {.marimo}
+@mo.cache
 def plotsin(amplitude, period):
-    if not numpy_installed:
-        return missing_numpy_msg
-    elif not matplotlib_installed:
-        return missing_matplotlib_msg
     x = np.linspace(0, 2 * np.pi, 256)
     plt.plot(x, amplitude * np.sin(2 * np.pi / period * x))
     plt.ylim(-2.2, 2.2)
     return plt.gca()
 ```
 
-```{.python.marimo}
+```python {.marimo}
 mo.md(
     f"""
+    **A sin curve.**
 
-      **A sin curve.**
-
-      - {amplitude}
-      - {period}
-      """
+    - {amplitude}
+    - {period}
+    """
 )
 ```
 
-```{.python.marimo}
+```python {.marimo}
 mo.md(
     rf"""
-
     You're viewing the graph of
 
     \[
@@ -245,30 +250,12 @@ mo.md(
 )
 ```
 
-```{.python.marimo hide_code="true"}
-matplotlib_installed = False
-numpy_installed = False
-missing_numpy_msg = mo.md("Oops! Looks like you don't have `numpy` installed.")
-missing_matplotlib_msg = mo.md(
-    "Oops! Looks like you don't have `matplotlib` installed."
-)
-
-try:
-    import matplotlib.pyplot as plt
-
-    matplotlib_installed = True
-except ModuleNotFoundError:
-    pass
-
-try:
-    import numpy as np
-
-    numpy_installed = True
-except ModuleNotFoundError:
-    pass
+```python {.marimo hide_code="true"}
+import matplotlib.pyplot as plt
+import numpy as np
 ```
 
-```{.python.marimo hide_code="true"}
+```python {.marimo hide_code="true"}
 import math
 
 import marimo as mo

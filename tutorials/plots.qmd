@@ -1,14 +1,13 @@
+This notebook has inlined package dependencies.
+Run in a sandboxed venv containing this notebook's dependencies? [Y/n]: Running in a sandbox: uv run --isolated --no-project --with-requirements /tmp/tmpavii6tsp.txt --python >=3.12 marimo export md /Users/dylan/src/quarto-marimo/.pixi/envs/default/lib/python3.13/site-packages/marimo/_tutorials/plots.py
 ---
 title: Plots
-marimo-version: 0.5.2
-format: html
-filters:
-  - marimo/quarto
+marimo-version: 0.12.9
 ---
 
 # Plotting
 
-```{.python.marimo hide_code="true"}
+```python {.marimo hide_code="true"}
 check_dependencies()
 ```
 
@@ -29,7 +28,7 @@ import matplotlib.pyplot as plt
 plt.plot([1, 2])
 ```
 
-```{.python.marimo}
+```python {.marimo}
 plt.plot([1, 2])
 ```
 
@@ -41,45 +40,45 @@ plt.plot([1, 2])
 plt.gca()
 ```
 
-```{.python.marimo}
+```python {.marimo}
 plt.plot([1, 2])
 # ... do some work ...
 # make plt.gca() the last line of the cell
 plt.gca()
 ```
 
-```{.python.marimo hide_code="true"}
+```python {.marimo hide_code="true"}
 mo.accordion(plt_show_explainer)
 ```
 
 **A new figure every cell.** Every cell starts with an empty figure for
 the imperative `pyplot` API.
 
-```{.python.marimo}
+```python {.marimo}
 x = np.linspace(start=-4, stop=4, num=100, dtype=float)
 ```
 
-```{.python.marimo}
+```python {.marimo}
 plt.plot(x, x)
 plt.plot(x, x**2)
 plt.gca()
 ```
 
-```{.python.marimo}
+```python {.marimo}
 plt.plot(x, x**3)
 ```
 
 To build a figure over multiple cells, use the object-oriented API and
 create your own axis:
 
-```{.python.marimo}
+```python {.marimo}
 _, axis = plt.subplots()
 axis.plot(x, x)
 axis.plot(x, x**2)
 axis
 ```
 
-```{.python.marimo}
+```python {.marimo}
 axis.plot(x, x**3)
 axis
 ```
@@ -88,7 +87,7 @@ axis
 
 Draw plots interactively by parametrizing them with UI elements.
 
-```{.python.marimo}
+```python {.marimo}
 exponent = mo.ui.slider(1, 5, value=1, step=1, label='exponent')
 
 mo.md(
@@ -100,16 +99,14 @@ mo.md(
 )
 ```
 
-```{.python.marimo}
-import functools
-
-
-@functools.cache
-def _plot(exponent):
+```python {.marimo}
+@mo.cache
+def plot_power(exponent):
     plt.plot(x, x**exponent)
     return plt.gca()
+```
 
-
+```python {.marimo}
 _tex = (
     f"$$f(x) = x^{exponent.value}$$" if exponent.value > 1 else "$$f(x) = x$$"
 )
@@ -119,7 +116,7 @@ mo.md(
 
     {_tex}
 
-    {mo.as_html(_plot(exponent.value))}
+    {mo.as_html(plot_power(exponent.value))}
     """
 )
 ```
@@ -138,7 +135,7 @@ or embed them in markdown with `mo.as_html`.
 If you would like another library to be integrated into marimo, please
 get in touch.
 
-````{.python.marimo hide_code="true"}
+````python {.marimo hide_code="true"}
 module_not_found_explainer = mo.md(
     """
     ## Oops!
@@ -146,16 +143,16 @@ module_not_found_explainer = mo.md(
     It looks like you're missing a package that this tutorial 
     requires.
 
-    Close marimo, install **`numpy`** and **`matplotlib`**, then 
-    open this tutorial once more.
+    Use the package manager panel on the left to install **numpy** and **matplotlib**,
+    then restart the tutorial.
 
-    If you use `pip`, run
+    Or, if you use `uv`, open the tutorial with
 
     ```
-    pip install numpy matplotlib
+    uvx marimo tutorial plots
     ```
 
-    at your command line.
+    at the command line.
     """
 ).callout(kind='warn')
 
@@ -164,7 +161,7 @@ def check_dependencies():
         return module_not_found_explainer
 ````
 
-```{.python.marimo hide_code="true"}
+```python {.marimo hide_code="true"}
 plt_show_explainer = {
     "Using `plt.show()`": """
     You can use `plt.show()` or `figure.show()` to display
@@ -174,7 +171,7 @@ plt_show_explainer = {
 }
 ```
 
-```{.python.marimo}
+```python {.marimo}
 try:
     import matplotlib
     import matplotlib.pyplot as plt
@@ -187,6 +184,6 @@ if not missing_packages:
     matplotlib.rcParams['figure.figsize'] = (6, 2.4)
 ```
 
-```{.python.marimo}
+```python {.marimo}
 import marimo as mo
 ```

@@ -1,22 +1,19 @@
 ---
 title: Intro
-marimo-version: 0.5.2
-format: html
-filters:
-  - marimo/quarto
+marimo-version: 0.12.9
 ---
 
-```{.python.marimo}
+```python {.marimo}
 import marimo as mo
 
 mo.md("# Welcome to marimo! 🌊🍃")
 ```
 
-```{.python.marimo}
+```python {.marimo}
 slider = mo.ui.slider(1, 22)
 ```
 
-```{.python.marimo}
+```python {.marimo}
 mo.md(
     f"""
     marimo is a **reactive** Python notebook.
@@ -30,7 +27,27 @@ mo.md(
 )
 ```
 
-```{.python.marimo hide_code="true"}
+```python {.marimo hide_code="true"}
+mo.accordion(
+    {
+        "Tip: disabling automatic execution": mo.md(
+            rf"""
+        marimo lets you disable automatic execution: just go into the
+        notebook settings and set
+
+        "Runtime > On Cell Change" to "lazy".
+
+        When the runtime is lazy, after running a cell, marimo marks its
+        descendants as stale instead of automatically running them. The
+        lazy runtime puts you in control over when cells are run, while
+        still giving guarantees about the notebook state.
+        """
+        )
+    }
+)
+```
+
+```python {.marimo hide_code="true"}
 mo.md(
     """
     Tip: This is a tutorial notebook. You can create your own notebooks
@@ -52,7 +69,7 @@ Reactivity keeps your program state and outputs in sync with your code,
 making for a dynamic programming environment that prevents bugs before they
 happen.
 
-```{.python.marimo hide_code="true"}
+```python {.marimo hide_code="true"}
 (
     mo.md(
         f"""
@@ -77,11 +94,11 @@ happen.
 )
 ```
 
-```{.python.marimo}
+```python {.marimo}
 changed = False
 ```
 
-```{.python.marimo hide_code="true"}
+```python {.marimo hide_code="true"}
 mo.accordion(
     {
         "Tip: execution order": (
@@ -101,7 +118,7 @@ mo.accordion(
 constraint on how names appear in cells: no two cells may define the same
 variable.
 
-```{.python.marimo hide_code="true"}
+```python {.marimo hide_code="true"}
 mo.accordion(
     {
         "Tip: encapsulation": (
@@ -114,7 +131,7 @@ mo.accordion(
 )
 ```
 
-```{.python.marimo hide_code="true"}
+```python {.marimo hide_code="true"}
 mo.accordion(
     {
         "Tip: private variables": (
@@ -139,19 +156,19 @@ marimo provides a library of UI elements to choose from under
 <!---->
 **🌊 Some UI elements.** Try interacting with the below elements.
 
-```{.python.marimo}
+```python {.marimo}
 icon = mo.ui.dropdown(["🍃", "🌊", "✨"], value="🍃")
 ```
 
-```{.python.marimo}
+```python {.marimo}
 repetitions = mo.ui.slider(1, 16, label=f"number of {icon.value}: ")
 ```
 
-```{.python.marimo}
+```python {.marimo}
 icon, repetitions
 ```
 
-```{.python.marimo}
+```python {.marimo}
 mo.md("# " + icon.value * repetitions.value)
 ```
 
@@ -173,7 +190,7 @@ values, and
 ## 4. Running notebooks as apps
 
 marimo notebooks can double as apps. Click the app window icon in the
-bottom-left to see this notebook in "app view."
+bottom-right to see this notebook in "app view."
 
 Serve a notebook as an app with `marimo run` at the command-line.
 Of course, you can use marimo just to level-up your
@@ -214,7 +231,11 @@ marimo convert your_notebook.ipynb > your_app.py
 - `markdown`: how to write markdown, with interpolated values and
    LaTeX
 - `plots`: how plotting works in marimo
+- `sql`: how to use SQL
+- `layout`: layout elements in marimo
 - `fileformat`: how marimo's file format works
+- `markdown-format`: for using `.md` files in marimo
+- `for-jupyter-users`: if you are coming from Jupyter
 
 Start a tutorial with `marimo tutorial`; for example,
 
@@ -229,7 +250,7 @@ In addition to tutorials, we have examples in our
 
 Here are some tips to help you get started with the marimo editor.
 
-```{.python.marimo}
+```python {.marimo}
 mo.accordion(tips)
 ```
 
@@ -240,7 +261,7 @@ the right conditions, clumps together to form a small sphere
 called a "marimo moss ball". Made of just strands of algae, these
 beloved assemblages are greater than the sum of their parts.
 
-```{.python.marimo hide_code="true"}
+```python {.marimo hide_code="true"}
 tips = {
     "Saving": (
         """
@@ -250,17 +271,17 @@ tips = {
           with `Ctrl/Cmd+s`. You can also create a named app at the
           command line, e.g., `marimo edit app_name.py`.
 
-        - _Save_ by clicking the save icon on the bottom left, or by
+        - _Save_ by clicking the save icon on the bottom right, or by
           inputting `Ctrl/Cmd+s`. By default marimo is configured
           to autosave.
         """
     ),
     "Running": (
         """
-        1. _Run a cell_ by clicking the play ( ▷ ) button on the bottom
+        1. _Run a cell_ by clicking the play ( ▷ ) button on the top
         right of a cell, or by inputting `Ctrl/Cmd+Enter`.
 
-        2. _Run a stale cell_  by clicking the yellow run button to the
+        2. _Run a stale cell_  by clicking the yellow run button on the
         right of the cell, or by inputting `Ctrl/Cmd+Enter`. A cell is
         stale when its code has been modified but not run.
 
@@ -288,12 +309,19 @@ tips = {
             screen, or with `Ctrl/Cmd+Shift+z`.
         """
     ),
+    "Disabling Automatic Execution": (
+        """
+        Via the notebook settings (gear icon) or footer panel, you
+        can disable automatic execution. This is helpful when
+        working with expensive notebooks or notebooks that have
+        side-effects like database transactions.
+        """
+    ),
     "Disabling Cells": (
         """
-        You can disable a cell via the cell context menu (open it
-        by clicking the icon to the right of a cell). marimo will
-        never run a disabled cell or any cells that depend on it. This
-        can help prevent accidental execution of expensive computations
+        You can disable a cell via the cell context menu.
+        marimo will never run a disabled cell or any cells that depend on it.
+        This can help prevent accidental execution of expensive computations
         when editing a notebook.
         """
     ),
@@ -309,8 +337,8 @@ tips = {
     ),
     "Code Formatting": (
         """
-        If you have [black](https://github.com/psf/black) installed, you can format a cell with
-        the keyboard shortcut `Ctrl/Cmd+b`.
+        If you have [ruff](https://github.com/astral-sh/ruff) installed,
+        you can format a cell with the keyboard shortcut `Ctrl/Cmd+b`.
         """
     ),
     "Command Palette": (
@@ -320,15 +348,23 @@ tips = {
     ),
     "Keyboard Shortcuts": (
         """
-        Click the keyboard button on the bottom left of the screen (or
-        input `Ctrl/Cmd+Shift+h`) to view a list of all keyboard
-        shortcuts.
+        Open the notebook menu (top-right) or input `Ctrl/Cmd+Shift+h` to
+        view a list of all keyboard shortcuts.
         """
     ),
     "Configuration": (
-       """
+        """
        Configure the editor by clicking the gears icon near the top-right
        of the screen.
+       """
+    ),
+    "Exit & Shutdown": (
+        """
+       You can leave Marimo & shut down the server by clicking the
+       circled X at the top right of the screen and responding
+       to the prompt. 
+
+       :floppy_disk: _Be sure to save your work first!_ 
        """
     ),
 }
