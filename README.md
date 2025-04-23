@@ -9,5 +9,5 @@ The purpose of this project is to **make it easy to use marimo's ecosystem with 
 Run
 
 ```bash
-quarto publish gh-pages
+pixi run serve
 ```
