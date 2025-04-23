@@ -1,4 +1,4 @@
-#!/usr/bin/env uv run -- python3
+#!/usr/bin/env python3
 
 import asyncio
 import json

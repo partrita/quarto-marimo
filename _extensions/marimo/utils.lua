@@ -6,11 +6,88 @@ function is_mime_sensitive()
     return string.match(output_file, "%.pdf$")
         or string.match(output_file, "%.tex$")
 end
+
 local stringify = pandoc.utils.stringify
+
+function concat_lists(...)
+    local result = {}
+    for i = 1, select("#", ...) do
+        local t = select(i, ...)
+        for j = 1, #t do
+            result[#result + 1] = t[j]
+        end
+    end
+    return result
+end
+
+-- Function to extract text from a Pandoc Para object
+local function extract_text_from_para(para)
+    local text = ""
+    for _, el in ipairs(para) do
+        if el.t == "Str" then
+            text = text .. el.text -- Add the string content
+        elseif el.t == "Space" then
+            text = text .. " " -- Add space
+        elseif el.t == "SoftBreak" then
+            text = text .. "\n" -- Add newline for SoftBreak
+        elseif el.t == "Quoted" then
+            -- Handle Quoted elements, extract the inner string
+            for _, q_el in ipairs(el.content) do
+                if q_el.t == "Str" then
+                    text = text .. '"' .. q_el.text .. '"'
+                end
+            end
+        end
+    end
+    return text
+end
+
+local function _parse_header_metadata(header_str)
+    local lines = {}
+    for line in header_str:gmatch("[^\r\n]+") do
+        table.insert(lines, line)
+    end
+
+    local in_block = false
+    local deps = { python_version = "3.10", dependencies = {} }
+    local dep_block = false
+
+    for _, l in ipairs(lines) do
+        if l:match("^%s*///") then
+            if not in_block then
+                in_block = true
+            else
+                break
+            end
+        elseif in_block then
+            -- strip leading "#"
+            local content = l:gsub("^%s*", "")
+            -- python version
+            local pv = content:match('^requires%-python%s*=%s*"(.-)"')
+            if pv then
+                deps.python_version = pv
+            -- start dependencies block
+            elseif content:match("^dependencies%s*=%s*%[") then
+                dep_block = true
+            elseif dep_block then
+                -- end of list
+                if content:match("%]") then
+                    dep_block = false
+                end
+                -- extract any quoted strings
+                for pkg in content:gmatch('"([^"]+)"') do
+                    table.insert(deps.dependencies, pkg)
+                end
+            end
+        end
+    end
+
+    return deps
+end
 
 -- Deduplicate and normalize sandbox dependencies,
 -- always include marimo@version and any feature‑specific packages.
-local function _normalize_sandbox_dependencies(deps, version, features)
+local function _normalize_sandbox_dependencies(deps, version)
     local seen, out = {}, {}
     for _, d in ipairs(deps or {}) do
         if not seen[d] then
@@ -23,82 +100,30 @@ local function _normalize_sandbox_dependencies(deps, version, features)
         table.insert(out, marimo_dep)
         seen[marimo_dep] = true
     end
-    for _, feat in ipairs(features or {}) do
-        local fdep = "marimo-" .. tostring(feat) .. "==" .. version
-        if not seen[fdep] then
-            table.insert(out, fdep)
-            seen[fdep] = true
-        end
-    end
     return out
 end
 
 -- Construct the full UV command given:
--- args               = list of marimo CLI args
--- additional_features= list of feature names
--- additional_deps    = list of extra pip deps
 function _construct_uv_command(meta)
-    -- print out all of meta
-    for k, v in pairs(meta) do
-        print(k)
-    end
-
-    -- 1. Build marimo invocation and strip "--sandbox"
-    local cmd = { "marimo" }
-
-    -- 2. Read metadata fields
-    local version = stringify(
-        meta["marimo-version"] or error("`marimo-version` missing in metadata")
+    --[[
+    -- TODO: Consider just calling from marimo.
+    --]]
+    local version = stringify(meta["marimo-version"] or "0.13.0")
+    local deps = _parse_header_metadata(
+        extract_text_from_para(meta["sandbox"][1].content)
     )
-    local raw_deps = {}
-    if meta.dependencies then
-        for _, item in ipairs(meta.dependencies) do
-            table.insert(raw_deps, stringify(item))
-        end
-    end
-    local uv_needs_refresh = (#raw_deps == 0)
+    local uv_needs_refresh = (#deps == 0)
 
-    local python_version = meta["requires-python"]
-        and stringify(meta["requires-python"])
+    local deps = _normalize_sandbox_dependencies(deps.dependencies, version)
 
-    local index_url = meta["index-url"] and stringify(meta["index-url"])
-
-    local extra_index_urls = {}
-    if meta["extra-index-urls"] then
-        for _, item in ipairs(meta["extra-index-urls"]) do
-            table.insert(extra_index_urls, stringify(item))
-        end
-    end
-
-    local index_configs = {}
-    if meta["index-configs"] then
-        for _, cfg in ipairs(meta["index-configs"]) do
-            local url = cfg.url and stringify(cfg.url)
-            if url then
-                table.insert(index_configs, { url = url })
-            end
-        end
-    end
-
-    -- 3. Normalize and extend dependencies
-    local deps =
-        _normalize_sandbox_dependencies(raw_deps, version, additional_features)
-    for _, d in ipairs(additional_deps or {}) do
-        table.insert(deps, d)
-    end
-
-    -- 4. Write deps to a temp requirements file
     local req_file = os.tmpname() .. ".txt"
     do
         local f = assert(io.open(req_file, "w"))
         f:write(table.concat(deps, "\n"))
         f:close()
     end
-    -- Cleanup of req_file can be arranged at process exit
 
-    -- 5. Build the UV command
     local uv_cmd = {
-        "uv",
         "run",
         "--isolated",
         "--no-project",
@@ -113,32 +138,11 @@ function _construct_uv_command(meta)
         table.insert(uv_cmd, "--python")
         table.insert(uv_cmd, python_version)
     end
-    if index_url then
-        table.insert(uv_cmd, "--index-url")
-        table.insert(uv_cmd, index_url)
-    end
-    for _, url in ipairs(extra_index_urls) do
-        table.insert(uv_cmd, "--extra-index-url")
-        table.insert(uv_cmd, url)
-    end
-    for _, cfg in ipairs(index_configs) do
-        table.insert(uv_cmd, "--index")
-        table.insert(uv_cmd, cfg.url)
-    end
-
-    -- 6. Append original marimo args and return
-    for _, v in ipairs(cmd) do
-        table.insert(uv_cmd, v)
-    end
 
     return uv_cmd
 end
 
 function run_marimo(meta)
-    -- if not meta["marimo-version"] then
-    --     error("`marimo-version` missing in metadata")
-    -- end
-    -- local command = _construct_uv_command(meta)
     local file_path = debug.getinfo(1, "S").source:sub(2)
     local file_dir = file_path:match("(.*[/\\])")
     local endpoint_script = file_dir .. "extract.py"
@@ -148,6 +152,13 @@ function run_marimo(meta)
     local mime_sensitive = "no"
     if is_mime_sensitive(doc) then
         mime_sensitive = "yes"
+    end
+
+    local command = endpoint_script
+    local args = {}
+    if meta["sandbox"] ~= nil then
+        command = "uv"
+        args = concat_lists(_construct_uv_command(meta), { endpoint_script })
     end
 
     local parsed_data = {}
@@ -161,12 +172,9 @@ function run_marimo(meta)
             text = text or ""
 
             -- Parse the input file using the external Python script
+            default_args = { filename, mime_sensitive }
             result = pandoc.json.decode(
-                pandoc.pipe(
-                    endpoint_script,
-                    { filename, mime_sensitive },
-                    text
-                )
+                pandoc.pipe(command, concat_lists(args, default_args), text)
             )
             -- Concatenate the result arrays
             for _, item in ipairs(result["outputs"]) do
