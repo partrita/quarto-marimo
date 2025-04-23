@@ -48,7 +48,6 @@ mo.md("Hello World!")
 **5.** Run!
 
 ```bash
-quarto preview
+quarto-cli preview
+# uvx --with marimo --from quarto-cli quarto preview
 ```
-
-
