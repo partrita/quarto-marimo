@@ -1,6 +1,8 @@
 ---
 title: Ui
 marimo-version: 0.12.9
+filters:
+    - marimo
 ---
 
 # UI Elements

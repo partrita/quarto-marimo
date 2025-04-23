@@ -1,6 +1,8 @@
 ---
 title: Fileformat
 marimo-version: 0.12.9
+filters:
+  - marimo
 ---
 
 ```python {.marimo hide_code="true"}

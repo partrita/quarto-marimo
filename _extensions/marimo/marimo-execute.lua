@@ -4,63 +4,21 @@
 -- It will also add the marimo assets to the document header.
 --]]
 
--- utils
-local function is_mime_sensitive()
-    -- Determine whether we can render the html tags that island produces. If
-    -- not, this flag will let's us directly output a representative value.
-    local output_file = PANDOC_STATE.output_file
-    return string.match(output_file, "%.pdf$")
-        or string.match(output_file, "%.tex$")
-end
-
-local function run_marimo()
-    local file_path = debug.getinfo(1, "S").source:sub(2)
-    local file_dir = file_path:match("(.*[/\\])")
-    local endpoint_script = file_dir .. "extract.py"
-
-    -- PDFs / LaTeX have to be handled specifically for mimetypes
-    -- Need to pass in a string as arg in python invocation.
-    local mime_sensitive = "no"
-    if is_mime_sensitive(doc) then
-        mime_sensitive = "yes"
-    end
-
-    local parsed_data = {}
-    local result = {}
-    for _, filename in ipairs(PANDOC_STATE.input_files) do
-        local input_file = io.open(filename, "r")
-        if input_file then
-            local text = input_file:read("*all")
-            input_file:close()
-
-            text = text or ""
-
-            -- Parse the input file using the external Python script
-            result = pandoc.json.decode(
-                pandoc.pipe(
-                    endpoint_script,
-                    { filename, mime_sensitive },
-                    text
-                )
-            )
-            -- Concatenate the result arrays
-            for _, item in ipairs(result["outputs"]) do
-                table.insert(parsed_data, item)
-            end
-        end
-    end
-    result["outputs"] = parsed_data
-    return result
-end
+local utils = require("utils")
 
 -- globals
-local is_mime_sensitive = is_mime_sensitive()
-local marimo_execution = run_marimo()
+local is_mime_sensitive = utils.is_mime_sensitive()
+local marimo_execution = nil
 local missingMarimoCell = true
 
 -- count number of entries in marimo_execution["outputs"]
+marimo_execution = utils.run_marimo({})
 local expected_cells = marimo_execution["count"]
 cell_index = 1
+
+function Meta(m)
+    return m
+end
 
 -- Hook functions to pandoc
 function CodeBlock(el)

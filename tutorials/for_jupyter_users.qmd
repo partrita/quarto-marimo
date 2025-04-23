@@ -1,6 +1,8 @@
 ---
 title: marimo for Jupyter users
 marimo-version: 0.12.9
+filters:
+  - marimo
 ---
 
 # marimo for Jupyter users

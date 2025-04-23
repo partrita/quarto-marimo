@@ -1,9 +1,9 @@
-This notebook has inlined package dependencies.
-Run in a sandboxed venv containing this notebook's dependencies? [Y/n]: Running in a sandbox: uv run --isolated --no-project --with-requirements /tmp/tmpacy22_u8.txt --python >=3.12 marimo export md /Users/dylan/src/quarto-marimo/.pixi/envs/default/lib/python3.13/site-packages/marimo/_tutorials/sql.py
----
+ ---
 title: Sql
 marimo-version: 0.12.9
 width: medium
+filters:
+    - marimo
 ---
 
 # Hello, SQL!

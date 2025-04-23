@@ -3,7 +3,7 @@
 
 TUTORIALS=$(python -c "print(__import__('marimo').__path__.pop())")
 
-cd "$(dirname "$0")"/tutorials
+cd "$(dirname "$0")"/../tutorials
 
 for py in "$TUTORIALS"/_tutorials/*.py; do
   # Somehow the literal *.py can be globbed.
@@ -14,6 +14,7 @@ for py in "$TUTORIALS"/_tutorials/*.py; do
   if [[ $py != *_tutorials/_* ]]; then
     echo $py
     marimo export md "$py" > "$(basename "$py" .py).qmd"
+    echo marimo export md "$py"
   fi
 done
 

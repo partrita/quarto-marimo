@@ -147,10 +147,15 @@ def build_export_with_mime_context(
             code = str(child.text)
             config, code = extract_and_strip_quarto_config(code)
 
-            stub = app.add_code(
-                code,
-                is_raw=True,
-            )
+            try:
+                stub = app.add_code(
+                    code,
+                    is_raw=True,
+                )
+            except Exception:
+                stubs.append((config, None))
+                continue
+
             assert isinstance(stub, MarimoIslandStub), "Unexpected error, please report"
 
             stubs.append(
