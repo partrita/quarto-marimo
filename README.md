@@ -1,4 +1,4 @@
-# marimo + quarto = :island: :heart:
+# marimo + quarto = :palm_tree: :heart:
 
 ## marimo
 
@@ -6,48 +6,46 @@ marimo is a next generation python notebook that is embeddable anywhere.
 As such, it is a great fit for quarto, which has reactive and robust a publishing system.
 This repo is a quarto filter that lets you use marimo in your quarto documents; just follow the setup below.
 
-### Setup
+### Quick Start
 
-1. Install Quarto + UV
+**1.** Tool Installation
 
-```bash
-pip install quarto uv
-```
+ - Install [uv](https://docs.astral.sh/uv/getting-started/installation/)
+ - Install [Quarto](https://quarto.org/docs/get-started/) (if you have brew: `brew install quarto`)
 
-2. Create a project
+**2.** Create a project
 
 ```bash
 quarto create project
 ```
 
-3. Add `quarto-marimo` to your project
+**3.** Add `quarto-marimo` to your project
 
 ```bash
 quarto add marimo-team/quarto-marimo
 ```
 
-4. Add the filter to relevant files
+**4.** Edit your `index.qmd`
 
-```yaml
+````yaml
 ---
 filters:
     - marimo-team/marimo
 ---
+
+# Just another Quarto project
+
+```python {.marimo}
+#| echo: true
+import marimo as mo
+mo.md("Hello World!")
 ```
+````
 
-or just
-
-```yaml
----
-filters:
-    - marimo
----
-```
-
-### Deployment
-
-Run
+**5.** Run!
 
 ```bash
 quarto preview
 ```
+
+
