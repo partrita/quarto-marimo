@@ -1,8 +1,10 @@
 ---
 title: Ui
-marimo-version: 0.12.9
+marimo-version: 0.13.2
+header: |-
+  # Copyright 2024 Marimo. All rights reserved.
 filters:
-    - marimo
+- marimo-team/marimo
 ---
 
 # UI Elements

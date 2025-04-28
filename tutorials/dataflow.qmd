@@ -1,8 +1,6 @@
- ---
+---
 title: Dataflow
-marimo-version: 0.12.9
-filters:
-    - marimo
+marimo-version: 0.13.2
 ---
 
 # How marimo notebooks run

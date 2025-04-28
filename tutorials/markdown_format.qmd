@@ -1,8 +1,6 @@
 ---
 title: Markdown
-marimo-version: 0.10.19
-filters:
-    - marimo
+marimo-version: 0.13.2
 ---
 
 # Markdown file format

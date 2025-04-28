@@ -13,8 +13,7 @@ for py in "$TUTORIALS"/_tutorials/*.py; do
   # ignore hidden cases
   if [[ $py != *_tutorials/_* ]]; then
     echo $py
-    marimo export md "$py" > "$(basename "$py" .py).qmd"
-    echo marimo export md "$py"
+    marimo export md "$py" -o "$(basename "$py" .py).qmd"
   fi
 done
 
@@ -26,7 +25,7 @@ for md in "$TUTORIALS"/_tutorials/*.md; do
   # ignore hidden cases
   if [[ $md != *_tutorials/_* ]]; then
     echo $md
-    cp "$md" "$(basename "$md" .md).qmd"
+    marimo export md "$md" -o "$(basename "$md" .md).qmd"
   fi
 done
 

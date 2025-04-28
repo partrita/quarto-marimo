@@ -217,5 +217,8 @@ if __name__ == "__main__":
     if not file:
         with open(reference_file) as f:
             file = f.read()
-    conversion = convert_from_md_to_pandoc_export(file, mime_sensitive.lower() == "yes")
+    no_js = mime_sensitive.lower() == "yes"
+    os.environ["MARIMO_NO_JS"] = str(no_js).lower()
+
+    conversion = convert_from_md_to_pandoc_export(file, no_js)
     sys.stdout.write(json.dumps(conversion))

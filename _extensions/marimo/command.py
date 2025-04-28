@@ -10,7 +10,7 @@ from marimo._cli.sandbox import PyProjectReader, construct_uv_flags
 
 def extract_command(header: str) -> list[str]:
     if not header.startswith("#"):
-        header = "# " + "\n# ".join(header.splitlines())
+        header = "\n# ".join(["# /// script", *header.splitlines(), "///"])
     pyproject = PyProjectReader.from_script(header)
     with tempfile.NamedTemporaryFile(
         mode="w", delete=False, suffix=".txt"

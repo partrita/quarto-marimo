@@ -84,9 +84,6 @@ local extract = {
                     table.insert(response, pandoc.BlockQuote(cell_table.value))
                     return response
                 end
-                print("Not captured type")
-                print("cell_table.type", cell_table.type)
-                print("cell_table.value", cell_table.value)
                 local code_block = response[1]
                 response =
                     pandoc.read(cell_table.value, cell_table.type).blocks

@@ -1,9 +1,7 @@
- ---
+---
 title: Sql
-marimo-version: 0.12.9
+marimo-version: 0.13.2
 width: medium
-filters:
-    - marimo
 ---
 
 # Hello, SQL!

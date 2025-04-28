@@ -25,10 +25,14 @@ end
 
 -- Function to extract text from a Pandoc Para object
 -- which is a deeply nested monad.
-local function extract_text_from_para(para)
+local function extract_text(para)
     local text = ""
+    -- If a table is passed, we need to iterate over its elements
     for _, el in ipairs(para) do
-        if el.t == "Str" then
+        if el.t == "Para" then
+            -- Recursively extract text from nested Para elements
+            text = text .. extract_text(el.content)
+        elseif el.t == "Str" then
             text = text .. el.text -- Add the string content
         elseif el.t == "Space" then
             text = text .. " " -- Add space
@@ -50,7 +54,11 @@ end
 function _construct_uv_command(header)
     local command_script = file_dir .. "command.py"
     return pandoc.json.decode(
-        pandoc.pipe("uv", {"run", "--with", "marimo", command_script}, header)
+        pandoc.pipe(
+            "uv",
+            { "run", "--with", "marimo", command_script },
+            header
+        )
     )
 end
 
@@ -67,10 +75,10 @@ function run_marimo(meta)
     local command = "uv"
     local args = {}
     if meta["sandbox"] ~= nil then
-        header = extract_text_from_para(meta["sandbox"][1].content)
+        header = extract_text(meta["sandbox"])
         args = concat_lists(_construct_uv_command(header), { endpoint_script })
     elseif meta["header"] ~= nil then
-        header = extract_text_from_para(meta["header"][1].content)
+        header = extract_text(meta["header"])
         args = concat_lists(_construct_uv_command(header), { endpoint_script })
     else
         args = concat_lists(_construct_uv_command(""), { endpoint_script })
