@@ -72,13 +72,17 @@ def get_mime_render(
         "reactive": config["eval"] and not mime_sensitive,
         "code": stub.code,
     }
+
     if output:
+        mimetype = output.mimetype
         if config["output"] and mime_sensitive:
-            if output.mimetype.startswith("image"):
+            if mimetype.startswith("image"):
                 return {"type": "figure", "value": f"{output.data}", **render_options}
-            if output.mimetype.startswith("text/plain"):
+            if mimetype.startswith("text/plain") or mimetype.startswith(
+                "text/markdown"
+            ):
                 return {"type": "para", "value": f"{output.data}", **render_options}
-            if output.mimetype == "application/vnd.marimo+error":
+            if mimetype == "application/vnd.marimo+error":
                 if config["error"]:
                     return {
                         "type": "blockquote",
@@ -88,7 +92,7 @@ def get_mime_render(
                 # Suppress errors otherwise
                 return {"type": "para", "value": "", **render_options}
 
-        elif output.mimetype == "application/vnd.marimo+error":
+        elif mimetype == "application/vnd.marimo+error":
             if config["warning"]:
                 sys.stderr.write(
                     "Warning: Only the `disabled` codeblock attribute is utilized"
@@ -105,6 +109,7 @@ def get_mime_render(
             display_code=config["echo"],
             display_output=config["output"],
             is_reactive=bool(render_options["reactive"]),
+            as_raw=mime_sensitive,
         ),
         **render_options,
     }

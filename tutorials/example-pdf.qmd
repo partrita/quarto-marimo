@@ -26,7 +26,7 @@ if missing_packages:
 Normally you would see plots and tables in this pdf, but the required packages are not installed.
 """
 
-check
+mo.md(check)
 ```
 
 ## Images
@@ -73,17 +73,6 @@ Which can be useful for embedding computed values like the fact
 that this was rendered by Marimo {mo.__version__} on {datetime.datetime.now()}.
 """
 ```
-
-```{.python.marimo}
-plt_show_explainer = {
-    "Using `plt.show()`": """
-    You can use `plt.show()` or `figure.show()` to display
-    plots in the console area of a cell. Keep in mind that console
-    outputs are not shown in the app view.
-    """
-}
-```
-
 
 ```{.python.marimo}
 try:
