@@ -71,9 +71,13 @@ error | True | Whether to show errors
 include | True | Whether to consider the block as part of the document
 editor | False | Whether to show the editor (only for marimo)
 
-:lightbulb: **Note**: You can open `.md` and `.qmd` files directly in marimo
+:bulb: **Note**: You can open `.md` and `.qmd` files directly in marimo
 like a normal notebook. Read more about it in the
 [tutorial](https://github.com/marimo-team/marimo/blob/main/marimo/_tutorials/markdown_format.md)
 
 :notebook: [**Check out the marimo mkdocs
 extension**](https://github.com/marimo-team/mkdocs-marimo)
+
+---
+
+Credits: [holoviz-quarto](https://github.com/awesome-panel/holoviz-quarto) for ideas on layout
