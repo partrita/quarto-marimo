@@ -8,7 +8,7 @@ description = "marimo package for quarto"
 dynamic = ["version"]
 dependencies = [
     # for marimo
-    "marimo",
+    "marimo>=0.13.3",
     # quarto itself
     "quarto",
     # uv is used in the script calls
