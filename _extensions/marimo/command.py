@@ -5,7 +5,14 @@ import sys
 import tempfile
 from textwrap import dedent
 
-from marimo._cli.sandbox import PyProjectReader, construct_uv_flags
+try:
+    from marimo._cli.sandbox import PyProjectReader, construct_uv_flags
+except ImportError as e:
+    from marimo import __version__
+    raise ImportError(
+        "Potential version incompatibility quartom-marimo requires marimo "
+        f">=0.13.3. marimo version {__version__} is detected. "
+    ) from e
 
 
 def extract_command(header: str) -> list[str]:

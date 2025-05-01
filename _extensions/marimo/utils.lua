@@ -74,8 +74,8 @@ function run_marimo(meta)
 
     local command = "uv"
     local args = {}
-    if meta["sandbox"] ~= nil then
-        header = extract_text(meta["sandbox"])
+    if meta["pyproject"] ~= nil then
+        header = extract_text(meta["pyproject"])
         args = concat_lists(_construct_uv_command(header), { endpoint_script })
     elseif meta["header"] ~= nil then
         header = extract_text(meta["header"])

@@ -1,12 +1,13 @@
 ---
 title: PDF example
 format: pdf
-sandbox: |
+pyproject: |
     requires-python = ">=3.11"
     dependencies = [
         "numpy",
         "pandas",
         "matplotlib",
+        "marimo>=0.13.3"
     ]
 filters:
   - marimo
