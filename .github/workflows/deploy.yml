@@ -15,7 +15,7 @@ jobs:
           pixi-version: v0.40.2
 
       - name: Render
-        run: quarto install tinytex && pixi run render
+        run: pixi run ci
 
       - name: deploy
         uses: JamesIves/github-pages-deploy-action@releases/v4
