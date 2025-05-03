@@ -96,7 +96,7 @@ Hold `ctrl` to manually run a stale cell.
 
 ### but how do I run this?
 
-Install quarto and `quarto install extension marimo-team/marimo`.
+Install quarto and `quarto install extension marimo-team/quarto-marimo`.
 
 You can also export existing notebooks into quarto format: `marimo export md mynotebook.py -o mynotebook.qmd`
 
