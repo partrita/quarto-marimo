@@ -80,21 +80,18 @@ extension**](https://github.com/marimo-team/mkdocs-marimo)
 
 ### Environment
 
-By default, marimo will use uv in a new environment. You can specify
-dependencies by [following our docs to set your pyproject
-behavior](https://docs.marimo.io/guides/package_reproducibility#markdown-file-support).
+By default, marimo will use `uv` to create a new virtual environment.
+You can specify dependencies by [following our docs](https://docs.marimo.io/guides/package_reproducibility#markdown-file-support).
 Note, that local files are not bound to be accessible in WASM runtimes- and on
-web load, dependencies are installed via
-[`micropip`](https://github.com/pyodide/micropip). As such, this is mainly
-advised for PDF rendering, or other output formats that do not support
+web load, dependencies are installed via [`micropip`](https://github.com/pyodide/micropip).
+As such, this is mainly advised for PDF rendering, or other output formats that do not support
 Javascript.
 
 > [!NOTE]
-> You can add this behavior to your `_quarto.yml` file for global behavior
+> You can add this to your `_quarto.yml` file for global behavior
 
 
-To disable this behavior: `external-env: true` can be set in your settings, but
-marimo must be installed.
+To disable this behavior, `external-env: true` can be set in your settings; this required both an active virtual environemtn with marimo installed.
 
 
 ---
