@@ -78,6 +78,22 @@ like a normal notebook. Read more about it in the
 :notebook: [**Check out the marimo mkdocs
 extension**](https://github.com/marimo-team/mkdocs-marimo)
 
+### Environment
+
+By default, marimo will use `uv` to create a new virtual environment.
+You can specify dependencies by [following our docs](https://docs.marimo.io/guides/package_reproducibility#markdown-file-support)
+and setting the yaml `pyproject` value in your notebook.
+
+To disable sandboxed behavior, set `external-env: true` in your notebook yaml; this requires an active virtual environment with marimo installed.
+
+> [!NOTE]
+> You can add `pyproject` or `enternal-env` to your `_quarto.yml` file for global behavior
+
+Note, that local files are not bound to be accessible in WASM runtimes- and on
+web load, dependencies are installed via [`micropip`](https://github.com/pyodide/micropip).
+As such, this is mainly advised for PDF rendering, or other output formats that do not support
+Javascript.
+
 ---
 
 Credits: [holoviz-quarto](https://github.com/awesome-panel/holoviz-quarto) for ideas on layout
