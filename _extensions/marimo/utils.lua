@@ -74,7 +74,17 @@ function run_marimo(meta)
 
     local command = "uv"
     local args = {}
-    if meta["pyproject"] ~= nil then
+    if meta["external-env"] ~= nil then
+        assert(
+            meta["external-env"] == true,
+            "The external-env meta key must be set to true or omitted"
+        )
+        assert(
+            meta["pyproject"] == nil,
+            "The pyproject meta key must be omitted when using external-env"
+        )
+        args = { "run", endpoint_script }
+    elseif meta["pyproject"] ~= nil then
         header = extract_text(meta["pyproject"])
         args = concat_lists(_construct_uv_command(header), { endpoint_script })
     elseif meta["header"] ~= nil then
