@@ -1,8 +1,5 @@
 # marimo + quarto = :palm_tree: :heart:
 
-> [!WARNING]
-> The Quarto marimo plugin is under active development. Features and documentation are being continuously updated and expanded.
-
 ## marimo
 
 marimo is a next generation python notebook that is embeddable anywhere.
@@ -41,7 +38,17 @@ filters:
 ```python {.marimo}
 #| echo: true
 import marimo as mo
-mo.md("Hello World!")
+slider = mo.ui.slider(1, 10, 1, label="Look, a slider!")
+slider
+```
+
+## More things
+
+And we can respond!
+
+```python {.marimo}
+# No echo here means we do not show the code
+mo.md("NaN" * slider.value + " Batman!")
 ```
 ````
 
