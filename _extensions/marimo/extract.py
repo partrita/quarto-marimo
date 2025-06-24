@@ -188,8 +188,9 @@ def build_export_with_mime_context(
 
         _ = asyncio.run(app.build())
         dev_server = os.environ.get("QUARTO_MARIMO_DEBUG_ENDPOINT", False)
+        version_override = os.environ.get("QUARTO_MARIMO_VERSION", marimo.__version__)
         header = app.render_head(
-            _development_url=dev_server, version_override=marimo.__version__
+            _development_url=dev_server, version_override=version_override
         )
 
         return SafeWrap(
