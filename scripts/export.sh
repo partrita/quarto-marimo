@@ -6,11 +6,11 @@ TUTORIALS=$(python -c "print(__import__('marimo').__path__.pop())")
 cd "$(dirname "$0")"/../tutorials
 
 for py in "$TUTORIALS"/_tutorials/*.py; do
-  # Somehow the literal *.py can be globbed.
+  # 어째서인지 리터럴 *.py가 글로브될 수 있습니다.
   if [ "$py" == '*.py' ]; then
     continue
   fi
-  # ignore hidden cases
+  # 숨겨진 경우는 무시합니다.
   if [[ $py != *_tutorials/_* ]]; then
     echo $py
     marimo export md "$py" -o "$(basename "$py" .py).qmd"
@@ -18,11 +18,11 @@ for py in "$TUTORIALS"/_tutorials/*.py; do
 done
 
 for md in "$TUTORIALS"/_tutorials/*.md; do
-  # Somehow the literal *.md can be globbed.
+  # 어째서인지 리터럴 *.md가 글로브될 수 있습니다.
   if [ "$md" == '*.md' ] || [ $(basename "$md") == "README.md" ]; then
     continue
   fi
-  # ignore hidden cases
+  # 숨겨진 경우는 무시합니다.
   if [[ $md != *_tutorials/_* ]]; then
     echo $md
     marimo export md "$md" -o "$(basename "$md" .md).qmd"
