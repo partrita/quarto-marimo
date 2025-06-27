@@ -1,45 +1,40 @@
 ---
-title: Markdown
+title: 마크다운
 marimo-version: 0.13.2
+lang: ko
 ---
 
-# Markdown file format
+# 마크다운 파일 형식
 
-By default, marimo notebooks are stored as pure Python files. However,
-you can also store and edit marimo notebooks as `.md` files, letting you
-work on prose-heavy marimo notebooks in your editor of choice.
+기본적으로 marimo 노트북은 순수 Python 파일로 저장됩니다. 그러나 marimo 노트북을 `.md` 파일로 저장하고 편집할 수도 있으므로 원하는 편집기에서 산문이 많은 marimo 노트북 작업을 할 수 있습니다.
 
-_Make sure to look at the markdown
-[source code](https://github.com/marimo-team/marimo/blob/main/marimo/_tutorials/markdown_format.md)
-of this tutorial!_
+_이 튜토리얼의 마크다운 [소스 코드](https://github.com/marimo-team/marimo/blob/main/marimo/_tutorials/markdown_format.md)를 확인하세요!_
 
-## Running markdown notebooks
+## 마크다운 노트북 실행
 
-To edit a markdown notebook, use
+마크다운 노트북을 편집하려면 다음을 사용합니다.
 
 ```bash
 $ marimo edit notebook.md
 ```
 
-To run it as an app, use
+앱으로 실행하려면 다음을 사용합니다.
 
 ```bash
 $ marimo run notebook.md
 ```
 <!---->
-## Exporting from Python
+## Python에서 내보내기
 
-You can export marimo notebooks that are stored as Python to the markdown format
-by running the following command:
+다음 명령을 실행하여 Python으로 저장된 marimo 노트북을 마크다운 형식으로 내보낼 수 있습니다.
 
 ```bash
 $ marimo export md notebook.py > notebook.md
 ```
 <!---->
-## Creating Python cells
+## Python 셀 만들기
 
-When you do need to create a Python cell in the markdown format, you can use a
-special code block:
+마크다운 형식으로 Python 셀을 만들어야 하는 경우 특수 코드 블록을 사용할 수 있습니다.
 
 ````md
 ```python {.marimo}
@@ -48,7 +43,7 @@ plt.plot([1, 2, 3, 4])
 ```
 ````
 
-This will create the following cell:
+그러면 다음 셀이 만들어집니다.
 
 ```python {.marimo}
 import matplotlib.pyplot as plt
@@ -57,23 +52,21 @@ plt.plot([1, 2, 3, 4])
 plt.gca()
 ```
 
-As long as your code block contains the word `marimo` in a brace, like
-`{marimo}`, or `{.marimo note="Whatever you want"}`, marimo will treat it as a Python cell.
+코드 블록에 `{marimo}` 또는 `{.marimo note="원하는 모든 것"}`과 같이 중괄호 안에 `marimo`라는 단어가 포함되어 있으면 marimo는 이를 Python 셀로 처리합니다.
 
-## `mo` tricks and tips
+## `mo` 트릭 및 팁
 
-You can break up markdown into multiple cells by using an empty html tag `<!---->`:
+빈 HTML 태그 `<!---->`를 사용하여 마크다운을 여러 셀로 나눌 수 있습니다.
 <!---->
-View the source of this notebook to see how this cell was created.
+이 노트북의 소스를 확인하여 이 셀이 어떻게 만들어졌는지 확인하세요.
 <!---->
-You can still hide cell code in markdown notebooks:
+마크다운 노트북에서도 셀 코드를 숨길 수 있습니다.
 
 ````md
 ```python {.marimo hide_code="true"}
 form = (
     # ...
-    # Just something a bit more complicated
-    # you might not want to see in the editor.
+    # 편집기에서 보고 싶지 않을 수 있는 좀 더 복잡한 내용입니다.
     # ...
 )
 form
@@ -83,123 +76,113 @@ form
 ```python {.marimo hide_code="true"}
 form = (
     mo.md('''
-    **Just how great is markdown?.**
+    **마크다운은 얼마나 훌륭한가요?**
 
     {markdown_is_awesome}
 
     {marimo_is_amazing}
 ''')
     .batch(
-        markdown_is_awesome=mo.ui.text(label="How much do you like markdown?", placeholder="It is pretty swell 🌊"),
-        marimo_is_amazing=mo.ui.slider(label="How much do you like marimo?", start=0, stop=11, value=11),
+        markdown_is_awesome=mo.ui.text(label="마크다운을 얼마나 좋아하시나요?", placeholder="꽤 멋집니다 🌊"),
+        marimo_is_amazing=mo.ui.slider(label="marimo를 얼마나 좋아하시나요?", start=0, stop=11, value=11),
     )
     .form(show_clear_button=True, bordered=False)
 )
 form
 ```
 
-and disable cells too:
+셀을 비활성화할 수도 있습니다.
 
 ````md
 ```python {.marimo disabled="true"}
-print("This code cell is disabled, there should be no output!")
+print("이 코드 셀은 비활성화되어 출력이 없어야 합니다!")
 ```
 ````
 
 ```python {.marimo disabled="true"}
-print("This code cell is disabled, there should be no output!")
+print("이 코드 셀은 비활성화되어 출력이 없어야 합니다!")
 ```
 
-Additionally, marimo knows when your code has a syntax issue:
+또한 marimo는 코드에 구문 문제가 있는지 알고 있습니다.
 
 ````md
 ```python {.marimo}
-print("This code cell has a syntax error"
+print("이 코드 셀에 구문 오류가 있습니다"
 ```
 ````
 
-and on notebook save, will annotate the cell for you:
+노트북 저장 시 셀에 주석을 달아줍니다.
 
 ````md
 ```python {.marimo unparseable="true"}
-print("This code cell has a syntax error"
+print("이 코드 셀에 구문 오류가 있습니다"
 ```
 ````
 
 ```python {.marimo unparsable="true"}
-print("This code cell has a syntax error"
+print("이 코드 셀에 구문 오류가 있습니다"
 ```
 
-## Limitations of the markdown format
+## 마크다운 형식의 제한 사항
 
-marimo's markdown support treats markdown as just plain old markdown. This
-means that trying to use string interpolation (like this `f"{'🍃' * 7}"`) will
-just give you the raw string. This lets you clearly delineate what values are
-supposed to be computed, and what values are static. To interpolate Python
-values, just use a Python cell:
+marimo의 마크다운 지원은 마크다운을 일반적인 마크다운으로 취급합니다. 즉, 문자열 보간(예: `f"{'🍃' * 7}"`)을 사용하려고 하면 원시 문자열만 반환됩니다. 이를 통해 계산해야 하는 값과 정적인 값을 명확하게 구분할 수 있습니다. Python 값을 보간하려면 Python 셀을 사용하기만 하면 됩니다.
 
 ```python {.marimo}
-mo.md(f"""Like so: {"🍃" * 7}""")
+mo.md(f"""이렇게요: {"🍃" * 7}""")
 ```
 
-### Limitations on conversion
+### 변환 제한 사항
 
-Whenever you try to implement a cell block like this:
+다음과 같은 셀 블록을 구현하려고 할 때마다:
 
 ````md
 ```python {.marimo}
-mo.md("This is a markdown cell")
+mo.md("이것은 마크다운 셀입니다")
 ```
 ````
 
-The markdown format will know to automatically keep this as markdown. However,
-some ambiguous cases can't be converted to markdown like this:
+마크다운 형식은 이를 자동으로 마크다운으로 유지한다는 것을 알고 있습니다. 그러나 일부 모호한 경우는 다음과 같이 마크다운으로 변환할 수 없습니다.
 
 ````python {.marimo}
 mo.md(
     """
-    This is a markdown cell with an execution block in it
+    이것은 실행 블록이 있는 마크다운 셀입니다.
     ```python {.marimo}
-    # Too ambiguous to convert
+    # 변환하기에는 너무 모호합니다.
     ```
     """
 )
 ````
 
-It's not likely that you'll run into this issue, but rest assured that marimo
-is working behind the scenes to keep your notebooks unambiguous and clean as
-possible.
+이 문제가 발생할 가능성은 낮지만 marimo는 노트북을 최대한 모호하지 않고 깔끔하게 유지하기 위해 백그라운드에서 작동하고 있으므로 안심하세요.
 <!---->
-### Saving multicolumn mode
+### 다중 열 모드 저장
 
-Multicolumn mode works, but the first cell in a column must be a python cell in
-order to specify column start and to save correctly:
+다중 열 모드는 작동하지만 열 시작을 지정하고 올바르게 저장하려면 열의 첫 번째 셀이 Python 셀이어야 합니다.
 
 ````md
 ```python {.marimo column="1"}
-print("First cell in column 1")
+print("1열의 첫 번째 셀")
 ```
 ````
 <!---->
-### Naming cells
+### 셀 이름 지정
 
-Since the markdown notebook really is just markdown, you can't import from a
-markdown notebook cells like you can in a python notebook; but you can still
-give your cells a name:
+마크다운 노트북은 실제로 마크다운일 뿐이므로 Python 노트북에서처럼 마크다운 노트북 셀에서 가져올 수 없습니다. 하지만 여전히 셀에 이름을 지정할 수 있습니다.
 
 ````md
 ```python {.marimo name="maybe"}
-# 🎵 Hey, I just met you, and this is crazy
+# 🎵 방금 만났는데, 이건 미친 짓이야
 ```
 ````
 
 ```python {.marimo name="maybe"}
-# But here's my `cell_id`, so call me, `maybe` 🎶
+# 하지만 여기 내 `cell_id`가 있으니, 전화해 줘, `maybe` 🎶
 ```
 
-### SQL in markdown
+### 마크다운의 SQL
 
-You can also run SQL queries in markdown cells through marimo, using a `sql` code block. For instance:
+marimo를 통해 마크다운 셀에서 `sql` 코드 블록을 사용하여 SQL 쿼리를 실행할 수도 있습니다. 예를 들어 다음과 같습니다.
 
 ````md
 ```sql {.marimo}
@@ -207,16 +190,16 @@ SELECT GREATEST(x, y), SQRT(z) from uniformly_random_numbers
 ```
 ````
 
-The resultant distribution may be surprising! 🎲[^surprise]
+결과 분포는 놀라울 수 있습니다! 🎲[^surprise]
 
-[^surprise]: The general distributions should be the same
+[^surprise]: 일반적인 분포는 동일해야 합니다.
 
 ```sql {.marimo}
 SELECT GREATEST(a, b), SQRT(c) from uniformly_random_numbers
 ```
 
-In this SQL format, Python variable interpolation in SQL queries occurs automatically. Additionally, query results can be assigned to a dataframe with the `query` attribute.
-For instance, here's how to create a random uniform distribution and assign it to the dataframe `uniformly_random_numbers` used above:
+이 SQL 형식에서는 SQL 쿼리의 Python 변수 보간이 자동으로 발생합니다. 또한 쿼리 결과를 `query` 속성을 사용하여 데이터프레임에 할당할 수 있습니다.
+예를 들어, 다음은 임의의 균일 분포를 만들고 위에서 사용한 `uniformly_random_numbers` 데이터프레임에 할당하는 방법입니다.
 
 ````md
 ```sql {.marimo query="uniformly_random_numbers" hide_output="true"}
@@ -225,15 +208,15 @@ SELECT i.range::text AS id,
        random() AS y,
        random() AS z
 FROM
-    -- Note sample_count comes from the slider below!
+    -- sample_count는 아래 슬라이더에서 가져옵니다!
     range(1, {sample_count.value + 1}) i;
 ```
 ````
 
-You can learn more about other SQL use in the SQL tutorial (`marimo tutorial sql`)
+SQL 자습서(`marimo tutorial sql`)에서 다른 SQL 사용에 대해 자세히 알아볼 수 있습니다.
 
 ```python {.marimo hide_code="true"}
-sample_count = mo.ui.slider(1, 1000, value=1000, label="Sample Count")
+sample_count = mo.ui.slider(1, 1000, value=1000, label="샘플 수")
 sample_count
 ```
 
@@ -245,20 +228,17 @@ SELECT i.range::text AS id,
 FROM range(1, {sample_count.value + 1}) i;
 ```
 
-## Converting back to the Python file format
+## Python 파일 형식으로 다시 변환
 
-The markdown format is supposed to lower the barrier for writing text heavy
-documents, it's not meant to be a full replacement for the Python notebook
-format. You can always convert back to a Python notebook if you need to:
+마크다운 형식은 텍스트가 많은 문서를 작성하는 장벽을 낮추기 위한 것이며 Python 노트북 형식을 완전히 대체하기 위한 것은 아닙니다. 필요한 경우 언제든지 Python 노트북으로 다시 변환할 수 있습니다.
 
 ```bash
 $ marimo convert my_marimo.md > my_marimo.py
 ```
 <!---->
-## More on markdown
+## 마크다운에 대한 추가 정보
 
-Be sure to checkout the markdown.py tutorial (`marimo tutorial markdown`) for
-more information on to type-set and render markdown in marimo.
+marimo에서 마크다운을 조판하고 렌더링하는 방법에 대한 자세한 내용은 markdown.py 자습서(`marimo tutorial markdown`)를 확인하세요.
 
 ```python {.marimo hide_code="true"}
 import marimo as mo

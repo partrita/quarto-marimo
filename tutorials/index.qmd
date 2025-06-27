@@ -1,25 +1,24 @@
 ---
-title: marimo tutorials
+title: marimo 튜토리얼
 format: html
+lang: ko
 filters:
   - marimo
 ---
 
-Open a tutorial.
+튜토리얼을 엽니다.
 
-marimo is a powerful library for making reactive notebooks and apps. To get
-the most out of marimo, get started with a few tutorials, starting with the
-intro:
+marimo는 반응형 노트북과 앱을 만들기 위한 강력한 라이브러리입니다. marimo를 최대한 활용하려면 다음 소개부터 시작하여 몇 가지 튜토리얼을 시작하세요.
 
         marimo tutorial intro
 
-Recommended sequence:
+권장 순서:
 
-- [intro](intro.html)
-- [dataflow](dataflow.html)
-- [ui](ui.html)
-- [markdown](markdown.html)
-- [plots](plots.html)
-- [layout](layout.html)
-- [fileformat](fileformat.html)
-- [for-jupyter-users](marimo_for_jupyter_users.html)
+- [소개](intro.html)
+- [데이터 흐름](dataflow.html)
+- [UI](ui.html)
+- [마크다운](markdown.html)
+- [플롯](plots.html)
+- [레이아웃](layout.html)
+- [파일 형식](fileformat.html)
+- [Jupyter 사용자용](marimo_for_jupyter_users.html)

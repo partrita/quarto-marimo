@@ -1,57 +1,45 @@
 ---
-title: Dataflow
+title: 데이터 흐름
 marimo-version: 0.13.2
+lang: ko
 ---
 
-# How marimo notebooks run
+# marimo 노트북 실행 방식
 
-Reactive execution is based on a single rule: when a cell is run, all other
-cells that reference any of the global variables it defines run
-automatically.
+반응형 실행은 단일 규칙을 기반으로 합니다. 셀이 실행되면 해당 셀이 정의하는 전역 변수를 참조하는 다른 모든 셀이 자동으로 실행됩니다.
 
-To provide reactive execution, marimo creates a dataflow graph out of your
-cells.
+반응형 실행을 제공하기 위해 marimo는 셀에서 데이터 흐름 그래프를 만듭니다.
 <!---->
-**Tip: disabling automatic execution.**
+**팁: 자동 실행 비활성화.**
 
-marimo lets you disable automatic execution: just go into the notebook settings
-and set
+marimo를 사용하면 자동 실행을 비활성화할 수 있습니다. 노트북 설정으로 이동하여
 
-"Runtime > On Cell Change" to "lazy".
+"런타임 > 셀 변경 시"를 "지연"으로 설정합니다.
 
-When the runtime is lazy, after running a cell, marimo marks its
-descendants as stale instead of automatically running them. The lazy
-runtime puts you in control over when cells are run, while still giving
-guarantees about the notebook state.
+런타임이 지연되면 셀을 실행한 후 marimo는 하위 항목을 자동으로 실행하는 대신 부실로 표시합니다. 지연 런타임은 셀 실행 시기를 제어하는 동시에 노트북 상태에 대한 보장을 제공합니다.
 <!---->
-## References and definitions
+## 참조 및 정의
 
-A marimo notebook is a directed acyclic graph in which nodes represent
-cells and edges represent data dependencies. marimo creates this graph by
-analyzing each cell (without running it) to determine its
+marimo 노트북은 노드가 셀을 나타내고 에지가 데이터 종속성을 나타내는 방향성 비순환 그래프입니다. marimo는 각 셀을 (실행하지 않고) 분석하여 다음을 결정함으로써 이 그래프를 만듭니다.
 
-- references ("refs*), the global variables it reads but doesn't define;
-- definitions ("defs"), the global variables it defines.
+- 참조("refs*"), 읽지만 정의하지 않는 전역 변수
+- 정의("defs"), 정의하는 전역 변수
 
-There is an edge from one cell to another if the latter cell references any
-global variables defined by the former cell.
+한 셀에서 다른 셀로의 에지는 후자 셀이 전자 셀에서 정의한 전역 변수를 참조하는 경우에 존재합니다.
 
-The rule for reactive execution can be restated in terms of the graph: when
-a cell is run, its descendants are run automatically.
+반응형 실행 규칙은 그래프 측면에서 다시 설명할 수 있습니다. 셀이 실행되면 해당 하위 항목이 자동으로 실행됩니다.
 <!---->
-### Example
+### 예제
 
-The next four cells plot a sine wave with a given period and amplitude.
-Each cell is labeled with its refs and defs.
+다음 네 개의 셀은 지정된 주기와 진폭을 가진 사인파를 플롯합니다. 각 셀에는 해당 참조 및 정의가 레이블로 지정되어 있습니다.
 
 ```python {.marimo hide_code="true"}
 mo.accordion(
     {
-        "Tip: inspecting refs and defs": f"""
-        Use `mo.refs()` and `mo.defs()` to inspect the refs and defs of any
-        given cell. This can help with debugging complex notebooks.
+        "팁: 참조 및 정의 검사": f"""
+        `mo.refs()` 및 `mo.defs()`를 사용하여 지정된 셀의 참조 및 정의를 검사합니다. 이는 복잡한 노트북을 디버깅하는 데 도움이 될 수 있습니다.
 
-        For example, here are the refs and defs of this cell:
+        예를 들어, 이 셀의 참조 및 정의는 다음과 같습니다.
 
         {mo.as_html({"refs": mo.refs(), "defs": mo.defs()})}
         """
@@ -114,12 +102,9 @@ mo.md(
 )
 ```
 
-🌊 **Try it!** In the above cells, try changing the value `period` or
-`ampltitude`, then click the run button ( ▷ ) to register your changes.
-See what happens to the sine wave.
+🌊 **시도해보세요!** 위의 셀에서 `period` 또는 `amplitude` 값을 변경한 다음 실행 버튼( ▷ )을 클릭하여 변경 사항을 등록합니다. 사인파에 어떤 일이 발생하는지 확인합니다.
 <!---->
-Here is the dataflow graph for the cells that make the sine wave plot, plus
-the cells that import libraries. Each cell is labeled with its defs.
+다음은 사인파 플롯을 만드는 셀과 라이브러리를 가져오는 셀에 대한 데이터 흐름 그래프입니다. 각 셀에는 해당 정의가 레이블로 지정되어 있습니다.
 
 ```
                    +------+               +-----------+
@@ -138,29 +123,21 @@ the cells that import libraries. Each cell is labeled with its defs.
                      +----+
 ```
 
-The last cell, which doesn't define anything, produces the plot.
+아무것도 정의하지 않는 마지막 셀은 플롯을 생성합니다.
 <!---->
-## Dataflow programming
+## 데이터 흐름 프로그래밍
 
-marimo's runtime rule has some important consequences that may seem
-surprising if you are not used to dataflow programming. We list these
-below.
+marimo의 런타임 규칙에는 데이터 흐름 프로그래밍에 익숙하지 않은 경우 놀랍게 보일 수 있는 몇 가지 중요한 결과가 있습니다. 아래에 이러한 결과를 나열합니다.
 <!---->
-### Execution order is not cell order
+### 실행 순서는 셀 순서가 아닙니다
 
-The order in which cells are executed is determined entirely by the
-dataflow graph. This makes marimo notebooks more reproducible than
-traditional notebooks. It also lets you place boilerplate, like
-imports or long markdown strings, at the bottom of the editor.
+셀이 실행되는 순서는 전적으로 데이터 흐름 그래프에 의해 결정됩니다. 이로 인해 marimo 노트북은 기존 노트북보다 더 재현 가능합니다. 또한 가져오기 또는 긴 마크다운 문자열과 같은 상용구를 편집기 하단에 배치할 수 있습니다.
 <!---->
-### Global variable names must be unique
+### 전역 변수 이름은 고유해야 합니다
 
-Every global variable can be defined by only one cell. Without this
-constraint, there would be no way for marimo to know which order to
-execute cells in.
+모든 전역 변수는 하나의 셀에서만 정의할 수 있습니다. 이 제약 조건이 없으면 marimo가 셀을 실행할 순서를 알 수 없습니다.
 
-If you violate this constraint, marimo provides a helpful
-error message, like below:
+이 제약 조건을 위반하면 marimo는 아래와 같이 유용한 오류 메시지를 제공합니다.
 
 ```python {.marimo}
 planet = "Mars"
@@ -172,15 +149,11 @@ planet = "Earth"
 planet
 ```
 
-**🌊 Try it!** In the previous cell, change the name `planet` to `home`,
-then run the cell.
+**🌊 시도해보세요!** 이전 셀에서 `planet` 이름을 `home`으로 변경한 다음 셀을 실행합니다.
 <!---->
-Because defs must be unique, global variables cannot be modified with
-operators like `+=` or `-=` in cells other than the one that created
-them; these operators count as redefinitions of a name.
+정의는 고유해야 하므로 전역 변수는 해당 변수를 만든 셀 이외의 셀에서 `+=` 또는 `-=`와 같은 연산자로 수정할 수 없습니다. 이러한 연산자는 이름 재정의로 간주됩니다.
 
-**🌊 Try it!** Get rid of the following errors by merging the next two
-cells into a single cell.
+**🌊 시도해보세요!** 다음 두 셀을 단일 셀로 병합하여 다음 오류를 제거합니다.
 
 ```python {.marimo}
 count = 0
@@ -190,14 +163,11 @@ count = 0
 count += 1
 ```
 
-### Underscore-prefixed variables are local to cells
+### 밑줄로 시작하는 변수는 셀에 로컬입니다
 
-Global variables prefixed with an underscore are "private" to the cells
-that define them. This means that multiple cells can define the same
-underscore-prefixed name, and one cell's private variables won't be
-made available to other cells.
+밑줄로 시작하는 전역 변수는 해당 변수를 정의하는 셀에 "비공개"입니다. 즉, 여러 셀에서 동일한 밑줄로 시작하는 이름을 정의할 수 있으며 한 셀의 비공개 변수는 다른 셀에서 사용할 수 없습니다.
 
-**Example**.
+**예제**.
 
 ```python {.marimo}
 _private_variable, _ = 1, 2
@@ -210,25 +180,22 @@ _private_variable, _
 ```
 
 ```python {.marimo}
-# `_private_variable` and `_` are not defined in this cell
+# `_private_variable` 및 `_`는 이 셀에 정의되어 있지 않습니다
 _private_variable, _
 ```
 
-### Deleting a cell deletes its variables
+### 셀을 삭제하면 해당 변수가 삭제됩니다
 
-Deleting a cell deletes its global variables and
-then runs all cells that reference them. This prevents severe bugs that
-can arise when state has been deleted from the editor but not from the
-program memory.
+셀을 삭제하면 해당 전역 변수가 삭제된 다음 해당 변수를 참조하는 모든 셀이 실행됩니다. 이렇게 하면 편집기에서는 상태가 삭제되었지만 프로그램 메모리에서는 삭제되지 않은 경우 발생할 수 있는 심각한 버그를 방지할 수 있습니다.
 
 ```python {.marimo}
-to_be_deleted = "variable still exists"
+to_be_deleted = "변수가 여전히 존재합니다"
 
 mo.md(
     """
-    🌊 **Try it!**
+    🌊 **시도해보세요!**
 
-    Delete this cell by clicking the trash bin icon.
+    휴지통 아이콘을 클릭하여 이 셀을 삭제합니다.
     """
 )
 ```
@@ -237,9 +204,9 @@ mo.md(
 to_be_deleted
 ```
 
-### Cycles are not allowed
+### 순환은 허용되지 않습니다
 
-Cycles among cells are not allowed. For example:
+셀 간의 순환은 허용되지 않습니다. 예를 들어:
 
 ```python {.marimo}
 one = two - 1
@@ -249,13 +216,11 @@ one = two - 1
 two = one + 1
 ```
 
-### marimo doesn't track attributes
+### marimo는 속성을 추적하지 않습니다
 
-marimo only tracks global variables. Writing object attributes does not
-trigger reactive execution.
+marimo는 전역 변수만 추적합니다. 개체 속성을 작성해도 반응형 실행이 트리거되지 않습니다.
 
-**🌊 Example**. Change the value of `state.number` in the next cell, then
-run the cell. Notice how the subsequent cell isn't updated.
+**🌊 예제**. 다음 셀에서 `state.number` 값을 변경한 다음 셀을 실행합니다. 후속 셀이 업데이트되지 않는 것을 확인합니다.
 
 ```python {.marimo}
 state.number = 1
@@ -276,54 +241,44 @@ state.number = 0
 ```python {.marimo hide_code="true"}
 mo.accordion(
     {
-        "Why not track attributes?": """
-        marimo can't reliably trace attributes 
-        to cells that define them. For example, attributes are routinely 
-        created or modified by library code.
+        "속성을 추적하지 않는 이유": """
+        marimo는 속성을 정의하는 셀로 안정적으로 추적할 수 없습니다. 예를 들어 속성은 라이브러리 코드에서 일상적으로 생성되거나 수정됩니다.
         """
     }
 )
 ```
 
-### marimo doesn't track mutations
+### marimo는 변경 사항을 추적하지 않습니다
 
-In Python, it's impossible to know whether code will
-mutate an object without running it. So: mutations (such as
-appending to a list) will not trigger reactive execution.
+Python에서는 코드를 실행하지 않고 개체를 변경할지 여부를 알 수 없습니다. 따라서 목록에 추가하는 것과 같은 변경 사항은 반응형 실행을 트리거하지 않습니다.
 
 ```python {.marimo hide_code="true"}
 mo.accordion(
     {
-        "Tip (advanced): mutable state": (
+        "팁 (고급): 변경 가능한 상태": (
             """
-        You can use the fact that marimo does not track attributes or 
-        mutations to implement mutable state in marimo. An example of
-        this is shown in the `ui` tutorial.
+        marimo가 속성이나 변경 사항을 추적하지 않는다는 사실을 사용하여 marimo에서 변경 가능한 상태를 구현할 수 있습니다. 이에 대한 예는 `ui` 자습서에 나와 있습니다.
         """
         )
     }
 )
 ```
 
-## Best practices
+## 모범 사례
 
-The constraints marimo puts on your notebooks are all natural consequences
-of the fact that marimo programs are directed acyclic graphs. As long as
-you keep this fact in mind, you'll quickly adapt to the marimo way of
-writing notebooks.
+marimo가 노트북에 적용하는 제약 조건은 모두 marimo 프로그램이 방향성 비순환 그래프라는 사실의 자연스러운 결과입니다. 이 사실을 염두에 두면 marimo 방식으로 노트북을 작성하는 데 빠르게 적응할 수 있습니다.
 
-Ultimately, these constraints will enable you to create powerful notebooks
-and apps, and they'll encourage you to write clean, reproducible code.
+궁극적으로 이러한 제약 조건을 통해 강력한 노트북과 앱을 만들 수 있으며 깔끔하고 재현 가능한 코드를 작성하도록 권장합니다.
 
-Follow these tips to stay on the marimo way:
+marimo 방식을 유지하려면 다음 팁을 따르십시오.
 
 ```python {.marimo}
 mo.accordion(tips)
 ```
 
-## What's next?
+## 다음 단계는 무엇인가요?
 
-Check out the tutorial on interactivity for a tour of UI elements:
+UI 요소 둘러보기에 대한 대화형 자습서를 확인하세요.
 
 ```
 marimo tutorial ui
@@ -336,81 +291,68 @@ import numpy as np
 
 ````python {.marimo hide_code="true"}
 tips = {
-    "Use global variables sparingly": (
+    "전역 변수를 드물게 사용": (
         """
-        Keep the number of global variables in your program small to avoid
-        name collisions across cells. Keep the number of global variables 
-        defined by any one cell small to make sure that the units of
-        reactive execution are small. 
+        셀 간의 이름 충돌을 피하기 위해 프로그램의 전역 변수 수를 적게 유지합니다. 반응형 실행 단위가 작도록 한 셀에서 정의하는 전역 변수 수를 적게 유지합니다.
         """
     ),
-    "Use descriptive names": (
+    "설명적인 이름 사용": (
         """
-        Use descriptive variable names, especially for global variables.
-        This will help you minimize name clashes, and will also result in
-        better code.
+        특히 전역 변수에 대해 설명적인 변수 이름을 사용합니다. 이렇게 하면 이름 충돌을 최소화하는 데 도움이 되며 더 나은 코드를 만들 수 있습니다.
         """
     ),
-    "Use functions": (
+    "함수 사용": (
         """
-        Encapsulate logic into functions to avoid polluting the global
-        namespace with temporary or intermediate variables.
+        임시 또는 중간 변수로 전역 네임스페이스를 오염시키지 않도록 논리를 함수로 캡슐화합니다.
         """
     ),
-    "Minimize mutations": (
+    "변경 최소화": (
         """
-        We saw earlier that marimo cannot track object mutations. So try
-        to only mutate an object in the cell that creates it, or create
-        new objects instead of mutating existing ones.
+        앞서 marimo가 개체 변경을 추적할 수 없다는 것을 확인했습니다. 따라서 개체를 만드는 셀에서만 개체를 변경하거나 기존 개체를 변경하는 대신 새 개체를 만듭니다.
 
-        For example, don't do this:
+        예를 들어 다음과 같이 하지 마십시오.
 
         ```python3
-        # a cell
+        # 셀
         numbers = [1, 2, 3]
         ```
 
         ```python3
-        # another cell
+        # 다른 셀
         numbers.append(4)
         ```
 
-        Instead, prefer
+        대신 다음을 선호합니다.
 
         ```python3
-        # a cell
+        # 셀
         numbers = [1, 2, 3]
         numbers.append(4)
         ```
 
-        or
+        또는
 
         ```python3
-        # a cell
+        # 셀
         numbers = [1, 2, 3]
         ```
 
         ```python3
-        # another cell
+        # 다른 셀
         more_numbers = numbers + [4]
         ```
         """
     ),
-    "Write idempotent cells": (
-        """  
-        Write cells whose outputs and behavior are the same when given
-        the same inputs (refs); such cells are called _idempotent_. This will
-        help you avoid bugs, and let you cache expensive intermediate
-        computations (see the next tip).
+    "멱등 셀 작성": (
+        """
+        동일한 입력(참조)이 주어졌을 때 출력과 동작이 동일한 셀을 작성합니다. 이러한 셀을 _멱등_이라고 합니다. 이렇게 하면 버그를 피하는 데 도움이 되며 비용이 많이 드는 중간 계산을 캐시할 수 있습니다(다음 팁 참조).
         """
     ),
-    "Cache intermediate computations with `@mo.cache`": (
+    "`@mo.cache`로 중간 계산 캐시": (
         """
-        Use `mo.cache` to cache the return value of expensive functions.
-        You can do this if you abstract complex logic into idempotent
-        functions, following earlier tips.
+        `mo.cache`를 사용하여 비용이 많이 드는 함수의 반환 값을 캐시합니다. 이전 팁에 따라 복잡한 논리를 멱등 함수로 추상화하면 이 작업을 수행할 수 있습니다.
 
-        For example:
+        예를 들어:
 
         ```python3
         import marimo as mo
@@ -420,15 +362,9 @@ tips = {
           ...
         ```
 
-        Whenever `compute_predictions` is called with a value of
-        `problem_parameters` it has not seen, it will compute the predictions
-        and store them in a cache. The next time it is called with the same
-        parameters, instead of recomputing the predictions, it will just 
-        fetch the previously computed ones from the cache.
+        `compute_predictions`가 아직 보지 못한 `problem_parameters` 값으로 호출될 때마다 예측을 계산하고 캐시에 저장합니다. 다음에 동일한 매개변수로 호출되면 예측을 다시 계산하는 대신 캐시에서 이전에 계산된 예측을 가져옵니다.
 
-        If you are familiar with `functools.cache`, `mo.cache` is
-        similar but more robust, with the cache persisting even
-        if the cell defining the function is re-run.
+        `functools.cache`에 익숙하다면 `mo.cache`는 비슷하지만 더 강력하며 함수를 정의하는 셀이 다시 실행되더라도 캐시가 유지됩니다.
         """
     ),
 }
