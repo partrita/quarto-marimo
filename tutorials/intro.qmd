@@ -1,6 +1,7 @@
 ---
-title: Intro
+title: 소개
 marimo-version: 0.13.2
+lang: ko
 header: |-
   # Copyright 2024 Marimo. All rights reserved.
 filters:
@@ -10,7 +11,7 @@ filters:
 ```python {.marimo}
 import marimo as mo
 
-mo.md("# Welcome to marimo! 🌊🍃")
+mo.md("# marimo에 오신 것을 환영합니다! 🌊🍃")
 ```
 
 ```python {.marimo}
@@ -20,11 +21,9 @@ slider = mo.ui.slider(1, 22)
 ```python {.marimo}
 mo.md(
     f"""
-    marimo is a **reactive** Python notebook.
+    marimo는 **반응형** Python 노트북입니다.
 
-    This means that unlike traditional notebooks, marimo notebooks **run
-    automatically** when you modify them or
-    interact with UI elements, like this slider: {slider}.
+    즉, 기존 노트북과 달리 marimo 노트북은 수정하거나 이 슬라이더와 같은 UI 요소와 상호 작용할 때 **자동으로 실행**됩니다. {slider}.
 
     {"##" + "🍃" * slider.value}
     """
@@ -34,17 +33,13 @@ mo.md(
 ```python {.marimo hide_code="true"}
 mo.accordion(
     {
-        "Tip: disabling automatic execution": mo.md(
+        "팁: 자동 실행 비활성화": mo.md(
             rf"""
-        marimo lets you disable automatic execution: just go into the
-        notebook settings and set
+        marimo를 사용하면 자동 실행을 비활성화할 수 있습니다. 노트북 설정으로 이동하여
 
-        "Runtime > On Cell Change" to "lazy".
+        "런타임 > 셀 변경 시"를 "지연"으로 설정합니다.
 
-        When the runtime is lazy, after running a cell, marimo marks its
-        descendants as stale instead of automatically running them. The
-        lazy runtime puts you in control over when cells are run, while
-        still giving guarantees about the notebook state.
+        런타임이 지연되면 셀을 실행한 후 marimo는 하위 항목을 자동으로 실행하는 대신 부실로 표시합니다. 지연 런타임은 셀 실행 시기를 제어하는 동시에 노트북 상태에 대한 보장을 제공합니다.
         """
         )
     }
@@ -54,45 +49,34 @@ mo.accordion(
 ```python {.marimo hide_code="true"}
 mo.md(
     """
-    Tip: This is a tutorial notebook. You can create your own notebooks
-    by entering `marimo edit` at the command line.
+    팁: 이것은 튜토리얼 노트북입니다. 명령줄에 `marimo edit`를 입력하여 자신만의 노트북을 만들 수 있습니다.
     """
 ).callout()
 ```
 
-## 1. Reactive execution
+## 1. 반응형 실행
 
-A marimo notebook is made up of small blocks of Python code called
-cells.
+marimo 노트북은 셀이라는 작은 Python 코드 블록으로 구성됩니다.
 
-marimo reads your cells and models the dependencies among them: whenever
-a cell that defines a global variable  is run, marimo
-**automatically runs** all cells that reference that variable.
+marimo는 셀을 읽고 셀 간의 종속성을 모델링합니다. 전역 변수를 정의하는 셀이 실행될 때마다 marimo는 해당 변수를 참조하는 모든 셀을 **자동으로 실행**합니다.
 
-Reactivity keeps your program state and outputs in sync with your code,
-making for a dynamic programming environment that prevents bugs before they
-happen.
+반응성은 프로그램 상태와 출력을 코드와 동기화하여 버그가 발생하기 전에 예방하는 동적 프로그래밍 환경을 만듭니다.
 
 ```python {.marimo hide_code="true"}
 (
     mo.md(
         f"""
-        **✨ Nice!** The value of `changed` is now {changed}.
+        **✨ 좋습니다!** `changed`의 값은 이제 {changed}입니다.
 
-        When you updated the value of the variable `changed`, marimo
-        **reacted** by running this cell automatically, because this cell
-        references the global variable `changed`.
+        변수 `changed`의 값을 업데이트하면 marimo는 이 셀이 전역 변수 `changed`를 참조하기 때문에 이 셀을 자동으로 실행하여 **반응**했습니다.
 
-        Reactivity ensures that your notebook state is always
-        consistent, which is crucial for doing good science; it's also what
-        enables marimo notebooks to double as tools and  apps.
+        반응성은 노트북 상태가 항상 일관되도록 보장하며, 이는 좋은 과학을 수행하는 데 중요합니다. 또한 marimo 노트북이 도구 및 앱으로 두 배로 활용될 수 있도록 하는 것입니다.
         """
     )
     if changed
     else mo.md(
         """
-        **🌊 See it in action.** In the next cell, change the value of the
-        variable  `changed` to `True`, then click the run button.
+        **🌊 실제로 확인해 보세요.** 다음 셀에서 변수 `changed`의 값을 `True`로 변경한 다음 실행 버튼을 클릭합니다.
         """
     )
 )
@@ -105,30 +89,23 @@ changed = False
 ```python {.marimo hide_code="true"}
 mo.accordion(
     {
-        "Tip: execution order": (
+        "팁: 실행 순서": (
             """
-            The order of cells on the page has no bearing on
-            the order in which cells are executed: marimo knows that a cell
-            reading a variable must run after the cell that  defines it. This
-            frees you to organize your code in the way that makes the most
-            sense for you.
+            페이지의 셀 순서는 셀이 실행되는 순서에 영향을 미치지 않습니다. marimo는 변수를 읽는 셀이 해당 변수를 정의하는 셀 다음에 실행되어야 한다는 것을 알고 있습니다. 이를 통해 가장 합리적인 방식으로 코드를 구성할 수 있습니다.
             """
         )
     }
 )
 ```
 
-**Global names must be unique.** To enable reactivity, marimo imposes a
-constraint on how names appear in cells: no two cells may define the same
-variable.
+**전역 이름은 고유해야 합니다.** 반응성을 사용하려면 marimo는 셀에 이름이 나타나는 방식에 제약 조건을 적용합니다. 즉, 두 셀이 동일한 변수를 정의할 수 없습니다.
 
 ```python {.marimo hide_code="true"}
 mo.accordion(
     {
-        "Tip: encapsulation": (
+        "팁: 캡슐화": (
             """
-            By encapsulating logic in functions, classes, or Python modules,
-            you can minimize the number of global variables in your notebook.
+            함수, 클래스 또는 Python 모듈에 논리를 캡슐화하여 노트북의 전역 변수 수를 최소화할 수 있습니다.
             """
         )
     }
@@ -138,34 +115,29 @@ mo.accordion(
 ```python {.marimo hide_code="true"}
 mo.accordion(
     {
-        "Tip: private variables": (
+        "팁: 비공개 변수": (
             """
-            Variables prefixed with an underscore are "private" to a cell, so
-            they can be defined by multiple cells.
+            밑줄로 시작하는 변수는 셀에 "비공개"이므로 여러 셀에서 정의할 수 있습니다.
             """
         )
     }
 )
 ```
 
-## 2. UI elements
+## 2. UI 요소
 
-Cells can output interactive UI elements. Interacting with a UI
-element **automatically triggers notebook execution**: when
-you interact with a UI element, its value is sent back to Python, and
-every cell that references that element is re-run.
+셀은 대화형 UI 요소를 출력할 수 있습니다. UI 요소와 상호 작용하면 **노트북 실행이 자동으로 트리거**됩니다. UI 요소와 상호 작용하면 해당 값이 Python으로 다시 전송되고 해당 요소를 참조하는 모든 셀이 다시 실행됩니다.
 
-marimo provides a library of UI elements to choose from under
-`marimo.ui`.
+marimo는 `marimo.ui`에서 선택할 수 있는 UI 요소 라이브러리를 제공합니다.
 <!---->
-**🌊 Some UI elements.** Try interacting with the below elements.
+**🌊 일부 UI 요소.** 아래 요소와 상호 작용해 보세요.
 
 ```python {.marimo}
 icon = mo.ui.dropdown(["🍃", "🌊", "✨"], value="🍃")
 ```
 
 ```python {.marimo}
-repetitions = mo.ui.slider(1, 16, label=f"number of {icon.value}: ")
+repetitions = mo.ui.slider(1, 16, label=f"{icon.value}의 수: ")
 ```
 
 ```python {.marimo}
@@ -176,199 +148,157 @@ icon, repetitions
 mo.md("# " + icon.value * repetitions.value)
 ```
 
-## 3. marimo is just Python
+## 3. marimo는 그냥 Python입니다
 
-marimo cells parse Python (and only Python), and marimo notebooks are
-stored as pure Python files — outputs are _not_ included. There's no
-magical syntax.
+marimo 셀은 Python(및 Python만)을 구문 분석하고 marimo 노트북은 순수 Python 파일로 저장됩니다. 출력은 포함되지 _않습니다_. 마법 같은 구문은 없습니다.
 
-The Python files generated by marimo are:
+marimo에서 생성된 Python 파일은 다음과 같습니다.
 
-- easily versioned with git, yielding minimal diffs
-- legible for both humans and machines
-- formattable using your tool of choice,
-- usable as Python  scripts, with UI  elements taking their default
-values, and
-- importable by other modules (more on that in the future).
+- git으로 쉽게 버전을 관리하고 최소한의 차이점을 생성합니다.
+- 인간과 기계 모두 읽을 수 있습니다.
+- 원하는 도구를 사용하여 형식을 지정할 수 있습니다.
+- UI 요소가 기본값을 사용하는 Python 스크립트로 사용할 수 있으며,
+- 다른 모듈에서 가져올 수 있습니다(나중에 자세히 설명).
 <!---->
-## 4. Running notebooks as apps
+## 4. 노트북을 앱으로 실행
 
-marimo notebooks can double as apps. Click the app window icon in the
-bottom-right to see this notebook in "app view."
+marimo 노트북은 앱으로 두 배로 활용될 수 있습니다. 오른쪽 하단의 앱 창 아이콘을 클릭하여 "앱 보기"에서 이 노트북을 확인하세요.
 
-Serve a notebook as an app with `marimo run` at the command-line.
-Of course, you can use marimo just to level-up your
-notebooking, without ever making apps.
+명령줄에서 `marimo run`을 사용하여 노트북을 앱으로 제공합니다. 물론 앱을 만들지 않고도 노트북 작업을 향상시키기 위해 marimo를 사용할 수 있습니다.
 <!---->
-## 5. The `marimo` command-line tool
+## 5. `marimo` 명령줄 도구
 
-**Creating and editing notebooks.** Use
+**노트북 생성 및 편집.** 터미널에서 다음을 사용합니다.
 
 ```
 marimo edit
 ```
 
-in a terminal to start the marimo notebook server. From here
-you can create a new notebook or edit existing ones.
+marimo 노트북 서버를 시작합니다. 여기에서 새 노트북을 만들거나 기존 노트북을 편집할 수 있습니다.
 
 
-**Running as apps.** Use
+**앱으로 실행.** 다음을 사용합니다.
 
 ```
 marimo run notebook.py
 ```
 
-to start a webserver that serves your notebook as an app in read-only mode,
-with code cells hidden.
+웹 서버를 시작하여 노트북을 읽기 전용 모드로 앱으로 제공하고 코드 셀은 숨깁니다.
 
-**Convert a Jupyter notebook.** Convert a Jupyter notebook to a marimo
-notebook using `marimo convert`:
+**Jupyter 노트북 변환.** `marimo convert`를 사용하여 Jupyter 노트북을 marimo 노트북으로 변환합니다.
 
 ```
 marimo convert your_notebook.ipynb > your_app.py
 ```
 
-**Tutorials.** marimo comes packaged with tutorials:
+**튜토리얼.** marimo에는 튜토리얼이 포함되어 있습니다.
 
-- `dataflow`: more on marimo's automatic execution
-- `ui`: how to use UI elements
-- `markdown`: how to write markdown, with interpolated values and
-   LaTeX
-- `plots`: how plotting works in marimo
-- `sql`: how to use SQL
-- `layout`: layout elements in marimo
-- `fileformat`: how marimo's file format works
-- `markdown-format`: for using `.md` files in marimo
-- `for-jupyter-users`: if you are coming from Jupyter
+- `dataflow`: marimo의 자동 실행에 대한 자세한 내용
+- `ui`: UI 요소 사용 방법
+- `markdown`: 보간된 값과 LaTeX를 사용하여 마크다운을 작성하는 방법
+- `plots`: marimo에서 플로팅이 작동하는 방식
+- `sql`: SQL 사용 방법
+- `layout`: marimo의 레이아웃 요소
+- `fileformat`: marimo의 파일 형식이 작동하는 방식
+- `markdown-format`: marimo에서 `.md` 파일 사용
+- `for-jupyter-users`: Jupyter에서 온 경우
 
-Start a tutorial with `marimo tutorial`; for example,
+`marimo tutorial`로 튜토리얼을 시작합니다. 예를 들어 다음과 같습니다.
 
 ```
 marimo tutorial dataflow
 ```
 
-In addition to tutorials, we have examples in our
-[our GitHub repo](https://www.github.com/marimo-team/marimo/tree/main/examples).
+튜토리얼 외에도 [GitHub 리포지토리](https://www.github.com/marimo-team/marimo/tree/main/examples)에 예제가 있습니다.
 <!---->
-## 6. The marimo editor
+## 6. marimo 편집기
 
-Here are some tips to help you get started with the marimo editor.
+다음은 marimo 편집기를 시작하는 데 도움이 되는 몇 가지 팁입니다.
 
 ```python {.marimo}
 mo.accordion(tips)
 ```
 
-## Finally, a fun fact
+## 마지막으로 재미있는 사실
 <!---->
-The name "marimo" is a reference to a type of algae that, under
-the right conditions, clumps together to form a small sphere
-called a "marimo moss ball". Made of just strands of algae, these
-beloved assemblages are greater than the sum of their parts.
+"marimo"라는 이름은 특정 조건에서 함께 뭉쳐 "marimo moss ball"이라는 작은 구체를 형성하는 해조류의 한 종류를 참조합니다. 해조류 가닥으로만 만들어진 이 사랑받는 집합체는 부분의 합보다 큽니다.
 
 ```python {.marimo hide_code="true"}
 tips = {
-    "Saving": (
+    "저장": (
         """
-        **Saving**
+        **저장**
 
-        - _Name_ your app using the box at the top of the screen, or
-          with `Ctrl/Cmd+s`. You can also create a named app at the
-          command line, e.g., `marimo edit app_name.py`.
+        - 화면 상단의 상자를 사용하거나 `Ctrl/Cmd+s`를 사용하여 앱의 _이름_을 지정합니다. 명령줄에서 `marimo edit app_name.py`와 같이 명명된 앱을 만들 수도 있습니다.
 
-        - _Save_ by clicking the save icon on the bottom right, or by
-          inputting `Ctrl/Cmd+s`. By default marimo is configured
-          to autosave.
+        - 오른쪽 하단의 저장 아이콘을 클릭하거나 `Ctrl/Cmd+s`를 입력하여 _저장_합니다. 기본적으로 marimo는 자동 저장하도록 구성되어 있습니다.
         """
     ),
-    "Running": (
+    "실행": (
         """
-        1. _Run a cell_ by clicking the play ( ▷ ) button on the top
-        right of a cell, or by inputting `Ctrl/Cmd+Enter`.
+        1. 셀 오른쪽 상단의 재생( ▷ ) 버튼을 클릭하거나 `Ctrl/Cmd+Enter`를 입력하여 _셀을 실행_합니다.
 
-        2. _Run a stale cell_  by clicking the yellow run button on the
-        right of the cell, or by inputting `Ctrl/Cmd+Enter`. A cell is
-        stale when its code has been modified but not run.
+        2. 셀 오른쪽의 노란색 실행 버튼을 클릭하거나 `Ctrl/Cmd+Enter`를 입력하여 _오래된 셀을 실행_합니다. 셀은 코드가 수정되었지만 실행되지 않은 경우 오래된 것입니다.
 
-        3. _Run all stale cells_ by clicking the play ( ▷ ) button on
-        the bottom right of the screen, or input `Ctrl/Cmd+Shift+r`.
+        3. 화면 오른쪽 하단의 재생( ▷ ) 버튼을 클릭하거나 `Ctrl/Cmd+Shift+r`을 입력하여 _모든 오래된 셀을 실행_합니다.
         """
     ),
-    "Console Output": (
+    "콘솔 출력": (
         """
-        Console output (e.g., `print()` statements) is shown below a
-        cell.
+        콘솔 출력(예: `print()` 문)은 셀 아래에 표시됩니다.
         """
     ),
-    "Creating, Moving, and Deleting Cells": (
+    "셀 생성, 이동 및 삭제": (
         """
-        1. _Create_ a new cell above or below a given one by clicking
-            the plus button to the left of the cell, which appears on
-            mouse hover.
+        1. 마우스를 가져가면 나타나는 셀 왼쪽의 더하기 버튼을 클릭하여 지정된 셀 위나 아래에 새 셀을 _만듭니다_.
 
-        2. _Move_ a cell up or down by dragging on the handle to the 
-            right of the cell, which appears on mouse hover.
+        2. 마우스를 가져가면 나타나는 셀 오른쪽의 핸들을 드래그하여 셀을 위나 아래로 _이동_합니다.
 
-        3. _Delete_ a cell by clicking the trash bin icon. Bring it
-            back by clicking the undo button on the bottom right of the
-            screen, or with `Ctrl/Cmd+Shift+z`.
+        3. 휴지통 아이콘을 클릭하여 셀을 _삭제_합니다. 화면 오른쪽 하단의 실행 취소 버튼을 클릭하거나 `Ctrl/Cmd+Shift+z`를 사용하여 다시 가져옵니다.
         """
     ),
-    "Disabling Automatic Execution": (
+    "자동 실행 비활성화": (
         """
-        Via the notebook settings (gear icon) or footer panel, you
-        can disable automatic execution. This is helpful when
-        working with expensive notebooks or notebooks that have
-        side-effects like database transactions.
+        노트북 설정(톱니바퀴 아이콘) 또는 바닥글 패널을 통해 자동 실행을 비활성화할 수 있습니다. 이는 비용이 많이 드는 노트북이나 데이터베이스 트랜잭션과 같은 부작용이 있는 노트북으로 작업할 때 유용합니다.
         """
     ),
-    "Disabling Cells": (
+    "셀 비활성화": (
         """
-        You can disable a cell via the cell context menu.
-        marimo will never run a disabled cell or any cells that depend on it.
-        This can help prevent accidental execution of expensive computations
-        when editing a notebook.
+        셀 컨텍스트 메뉴를 통해 셀을 비활성화할 수 있습니다. marimo는 비활성화된 셀이나 해당 셀에 의존하는 셀을 실행하지 않습니다. 이렇게 하면 노트북을 편집할 때 비용이 많이 드는 계산이 우발적으로 실행되는 것을 방지하는 데 도움이 될 수 있습니다.
         """
     ),
-    "Code Folding": (
+    "코드 접기": (
         """
-        You can collapse or fold the code in a cell by clicking the arrow
-        icons in the line number column to the left, or by using keyboard
-        shortcuts.
+        왼쪽 줄 번호 열의 화살표 아이콘을 클릭하거나 키보드 단축키를 사용하여 셀의 코드를 축소하거나 접을 수 있습니다.
 
-        Use the command palette (`Ctrl/Cmd+k`) or a keyboard shortcut to
-        quickly fold or unfold all cells.
+        명령 팔레트(`Ctrl/Cmd+k`) 또는 키보드 단축키를 사용하여 모든 셀을 빠르게 접거나 펼칩니다.
         """
     ),
-    "Code Formatting": (
+    "코드 서식 지정": (
         """
-        If you have [ruff](https://github.com/astral-sh/ruff) installed,
-        you can format a cell with the keyboard shortcut `Ctrl/Cmd+b`.
-        """
-    ),
-    "Command Palette": (
-        """
-        Use `Ctrl/Cmd+k` to open the command palette.
+        [ruff](https://github.com/astral-sh/ruff)가 설치되어 있으면 키보드 단축키 `Ctrl/Cmd+b`를 사용하여 셀의 서식을 지정할 수 있습니다.
         """
     ),
-    "Keyboard Shortcuts": (
+    "명령 팔레트": (
         """
-        Open the notebook menu (top-right) or input `Ctrl/Cmd+Shift+h` to
-        view a list of all keyboard shortcuts.
+        `Ctrl/Cmd+k`를 사용하여 명령 팔레트를 엽니다.
         """
     ),
-    "Configuration": (
+    "키보드 단축키": (
         """
-       Configure the editor by clicking the gears icon near the top-right
-       of the screen.
+        노트북 메뉴(오른쪽 상단)를 열거나 `Ctrl/Cmd+Shift+h`를 입력하여 모든 키보드 단축키 목록을 봅니다.
+        """
+    ),
+    "구성": (
+        """
+       화면 오른쪽 상단 근처의 톱니바퀴 아이콘을 클릭하여 편집기를 구성합니다.
        """
     ),
-    "Exit & Shutdown": (
+    "종료 및 시스템 종료": (
         """
-       You can leave Marimo & shut down the server by clicking the
-       circled X at the top right of the screen and responding
-       to the prompt. 
+       화면 오른쪽 상단의 원형 X를 클릭하고 프롬프트에 응답하여 Marimo를 종료하고 서버를 종료할 수 있습니다.
 
-       :floppy_disk: _Be sure to save your work first!_ 
+       :floppy_disk: _먼저 작업을 저장해야 합니다!_
        """
     ),
 }

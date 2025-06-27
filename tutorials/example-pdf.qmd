@@ -1,6 +1,7 @@
 ---
-title: PDF example
+title: PDF 예제
 format: pdf
+lang: ko
 pyproject: |
     requires-python = ">=3.11"
     dependencies = [
@@ -14,28 +15,28 @@ filters:
 extract-media: _site/media
 ---
 
-# PDF Output
+# PDF 출력
 
 ```{.python.marimo}
 check = """
-Quarto can handle images and tables in PDF output, but not rich HTML outputs.
-Here's an example of what can be acccomplished with the `marimo` exports to pdf.
+Quarto는 PDF 출력에서 이미지와 표를 처리할 수 있지만 풍부한 HTML 출력은 처리할 수 없습니다.
+다음은 `marimo`를 사용하여 pdf로 내보낼 때 수행할 수 있는 작업의 예입니다.
 """
 
 if missing_packages:
   check = """
-Normally you would see plots and tables in this pdf, but the required packages are not installed.
+일반적으로 이 PDF에서 플롯과 표를 볼 수 있지만 필요한 패키지가 설치되어 있지 않습니다.
 """
 
 mo.md(check)
 ```
 
-## Images
+## 이미지
 
-We can still do plots!
+여전히 플롯을 만들 수 있습니다!
 
 ```python3
-# create the plot in the last line of the cell
+# 셀의 마지막 줄에 플롯 만들기
 import matplotlib.pyplot as plt
 plt.plot([1, 2])
 ```
@@ -45,9 +46,9 @@ plt.plot([1, 2])
 plt.gca()
 ```
 
-## Tables
+## 표
 
-We can also do tables!
+표도 만들 수 있습니다!
 
 ```python3
 import pandas as pd
@@ -66,12 +67,12 @@ df = pd.DataFrame({
 df
 ```
 
-## Text / Markdown
+## 텍스트 / 마크다운
 
 ```{.python.marimo}
-f"""You can also include text or markdown in the PDF output.
-Which can be useful for embedding computed values like the fact
-that this was rendered by Marimo {mo.__version__} on {datetime.datetime.now()}.
+f"""PDF 출력에 텍스트나 마크다운을 포함할 수도 있습니다.
+이는 Marimo {mo.__version__} 버전으로 {datetime.datetime.now()}에 렌더링되었다는 사실과 같이
+계산된 값을 포함하는 데 유용할 수 있습니다.
 """
 ```
 
