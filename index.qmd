@@ -1,6 +1,7 @@
 ---
 title: marimo + quarto
 format: html
+lang: ko
 filters:
   - marimo
 ---
@@ -9,10 +10,7 @@ filters:
 ---
 
 
-This repository provides a framework for integrating
-[`Quarto`](https://quarto.org) with [`marimo`](https://marimo.io),
-enabling markdown documents to be executed in a `marimo` environment, and
-reactive in page.
+이 저장소는 [`Quarto`](https://quarto.org)와 [`marimo`](https://marimo.io)를 통합하기 위한 프레임워크를 제공하여, 마크다운 문서가 `marimo` 환경에서 실행되고 페이지 내에서 반응형으로 작동하도록 합니다.
 
 ```python {.marimo}
 slider = mo.ui.slider(start=1, stop=10)
@@ -22,93 +20,86 @@ slider
 ```python {.marimo}
 #| echo: true
 mo.md(f'''
-  # Hello from marimo!{'!' * slider.value}
+  # marimo에서 안녕하세요!{'!' * slider.value}
 
-  This is a raw, reactive python cell.
-  You can edit it, and the output will change on run.
+  이것은 원시적이고 반응형인 파이썬 셀입니다.
+  편집할 수 있으며 실행 시 출력이 변경됩니다.
 ''').callout("info")
 ```
 
-## What?
+## 무엇인가요?
 
-First, aquaint yourself with the [`marimo`](https://marimo.io)! One you've
-digested the basics, and maybe [even written a few `marimo`
-notebooks](https://marimo.app), start to consider the possibilities of exporting
-`marimo` cells to be standalone, Web Assembly modules, embeddable anywhere.
+먼저 [`marimo`](https://marimo.io)에 대해 알아보세요! 기본 사항을 익히고 [몇 개의 `marimo` 노트북을 작성](https://marimo.app)한 후에는 `marimo` 셀을 독립 실행형 웹 어셈블리 모듈로 내보내 어디에나 포함할 수 있는 가능성을 고려해 보세요.
 
-That's where Quarto comes in with the `qmd` format.
+이것이 Quarto가 `qmd` 형식으로 등장하는 지점입니다.
 
-`qmd` is a markdown format that allows for the extraction and execution of code
-cells in a markdown document. It's a great way to maintain readable documents
-exportable to a variety of formats, while still being able to execute code.
+`qmd`는 마크다운 문서에서 코드 셀을 추출하고 실행할 수 있도록 하는 마크다운 형식입니다. 코드를 실행하면서도 다양한 형식으로 내보낼 수 있는 읽기 쉬운 문서를 유지하는 좋은 방법입니다.
 
-This page, and the `marimo` tutorials in the sidebar are `qmd` documents, to get
-a sense of what's possible,
-[look at their source](javascript:document.getElementById("quarto-code-tools-source").click()).
+이 페이지와 사이드바의 `marimo` 튜토리얼은 `qmd` 문서입니다. 가능한 작업에 대한 감을 잡으려면 [소스 보기](javascript:document.getElementById("quarto-code-tools-source").click())를 클릭하세요.
 
-## Getting started
+## 시작하기
 
-Write a `qmd` document with `{marimo}` cells.
+`{marimo}` 셀이 있는 `qmd` 문서를 작성합니다.
 
-For instance the following cell
+예를 들어 다음 셀은
 
 ````python
 ```python {.marimo}
-print("remember that stdout is not shown")
-result = "Only outputs!"
+print("stdout은 표시되지 않음을 기억하세요")
+result = "출력만!"
 result,
 ```
 ````
 
-produces the following output:
+다음과 같은 출력을 생성합니다.
 
 ```python {.marimo}
-print("remember that stdout is not shown")
-result = "Only outputs!"
+print("stdout은 표시되지 않음을 기억하세요")
+result = "출력만!"
 result,
 ```
 
 ---
 
-We can make it editable:
+편집 가능하게 만들 수 있습니다.
 
 ````python
 ```python {.marimo}
 #| editor: true
-editor_result = "Change me" + ("!" * 3)
+editor_result = "나를 변경하세요" + ("!" * 3)
 editor_result,
 ```
 ````
 
 ```python {.marimo}
 #| echo: true
-editor_result = "Change me" + ("!" * 3)
+editor_result = "나를 변경하세요" + ("!" * 3)
 editor_result,
 ```
 
-but the default is to show the output only.
+하지만 기본값은 출력만 표시하는 것입니다.
 
 ---
 
 ```python {.marimo}
 mo.md(
-  f"The value of `editor_result` in the previous cell: **{editor_result}**")
+  f"이전 셀의 `editor_result` 값: **{editor_result}**")
 ```
 
 ---
 
-Hold `ctrl` to manually run a stale cell.
+`ctrl` 키를 누른 채로 오래된 셀을 수동으로 실행합니다.
 
-### but how do I run this?
+### 하지만 어떻게 실행하나요?
 
-Install quarto and `quarto install extension marimo-team/quarto-marimo`.
+quarto를 설치하고 `quarto install extension marimo-team/quarto-marimo`를 실행합니다.
 
-You can also export existing notebooks into quarto format: `marimo export md mynotebook.py -o mynotebook.qmd`
+기존 노트북을 quarto 형식으로 내보낼 수도 있습니다. `marimo export md mynotebook.py -o mynotebook.qmd`
 
-## Background cells shown for illustration
+## 설명을 위해 표시된 배경 셀
 
 ```python {.marimo}
 #| echo: true
-# Bug: Cells are not runnable if no output
+# 버그: 출력이 없으면 셀을 실행할 수 없습니다.
 import marimo as mo
 ```
