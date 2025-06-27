@@ -1,22 +1,22 @@
 ---
-title: marimo for Jupyter users
+title: Jupyter 사용자를 위한 marimo
 marimo-version: 0.13.2
+lang: ko
 header: |-
   # Copyright 2024 Marimo. All rights reserved.
 filters:
 - marimo-team/marimo
 ---
 
-# marimo for Jupyter users
+# Jupyter 사용자를 위한 marimo
 
-This notebook explains important differences between Jupyter and marimo. If you're
-familiar with Jupyter and are trying out marimo for the first time, read on!
+이 노트북은 Jupyter와 marimo의 중요한 차이점을 설명합니다. Jupyter에 익숙하고 marimo를 처음 사용하는 경우 계속 읽어보세요!
 <!---->
-## Reactive execution
+## 반응형 실행
 
-The biggest difference between marimo and Jupyter is *reactive execution*.
+marimo와 Jupyter의 가장 큰 차이점은 *반응형 실행*입니다.
 
-Try updating the value of x in the next cell, then run it.
+다음 셀에서 x 값을 업데이트한 다음 실행해 보세요.
 
 ```python {.marimo}
 x = 0; x
@@ -26,31 +26,26 @@ x = 0; x
 y = x + 1; y
 ```
 
-marimo 'reacts' to the change in `x` and automatically recalculates `y`!
+marimo는 `x`의 변경에 '반응'하여 자동으로 `y`를 다시 계산합니다!
 
-**Explanation.** marimo reads the code in your cells and understands the
-dependences between them, based on the variables that each cell declares and
-references. When you execute one cell, marimo automatically executes all other
-cells that depend on it, not unlike a spreadsheet.
+**설명.** marimo는 셀의 코드를 읽고 각 셀이 선언하고 참조하는 변수를 기반으로 셀 간의 종속성을 이해합니다. 하나의 셀을 실행하면 marimo는 스프레드시트와 유사하게 해당 셀에 종속된 다른 모든 셀을 자동으로 실행합니다.
 
-In contrast, Jupyter requires you to manually run each cell.
+반대로 Jupyter는 각 셀을 수동으로 실행해야 합니다.
 <!---->
-### Why?
+### 왜 그럴까요?
 
-Reactive execution frees you from the tedious task of manually re-running cells.
+반응형 실행은 셀을 수동으로 다시 실행하는 지루한 작업에서 벗어나게 해줍니다.
 
-It also ensures that your code and outputs remain in sync:
+또한 코드와 출력이 동기화되도록 보장합니다.
 
-- You don't have to worry about whether you forgot to re-run a cell.
-- When you delete a cell, its variables are automatically removed from
-program memory. Affected cells are automatically invalidated.
+- 셀을 다시 실행하는 것을 잊었는지 걱정할 필요가 없습니다.
+- 셀을 삭제하면 해당 변수가 프로그램 메모리에서 자동으로 제거됩니다. 영향을 받는 셀은 자동으로 무효화됩니다.
 
-This makes marimo notebooks as reproducible as regular Python scripts.
+이로 인해 marimo 노트북은 일반 Python 스크립트만큼 재현 가능합니다.
 <!---->
-## Interactive elements built-in
+## 내장된 대화형 요소
 
-marimo comes with a [large library of UI elements](https://docs.marimo.io/guides/interactivity.html) that are automatically
-synchronized with Python.
+marimo에는 Python과 자동으로 동기화되는 [UI 요소의 대규모 라이브러리](https://docs.marimo.io/guides/interactivity.html)가 함께 제공됩니다.
 
 ```python {.marimo}
 import marimo as mo
@@ -65,30 +60,23 @@ slider
 slider.value
 ```
 
-**Explanation.** marimo is both a notebook and a library. Import `marimo as
-mo` and use `mo.ui` to get access to powerful UI elements.
+**설명.** marimo는 노트북이자 라이브러리입니다. `marimo as mo`를 가져오고 `mo.ui`를 사용하여 강력한 UI 요소에 액세스합니다.
 
-UI elements assigned to variables are automatically plugged into marimo's
-reactive execution model: interactions automatically trigger execution of
-cells that refer to them.
+변수에 할당된 UI 요소는 marimo의 반응형 실행 모델에 자동으로 연결됩니다. 상호 작용은 해당 요소를 참조하는 셀의 실행을 자동으로 트리거합니다.
 
-In contrast, Jupyter's lack of reactivity makes IPyWidgets difficult to use.
+반대로 Jupyter의 반응성 부족으로 인해 IPyWidgets를 사용하기 어렵습니다.
 <!---->
-## Shareable as apps
+## 앱으로 공유 가능
 
-marimo notebooks can be shared as read-only web apps: just serve it with
+marimo 노트북은 읽기 전용 웹 앱으로 공유할 수 있습니다. 명령줄에서 다음을 사용하여 제공하기만 하면 됩니다.
 
 ```marimo run your_notebook.py```
 
-at the command-line.
-
-Not every marimo notebook needs to be shared as an app, but marimo makes it
-seamless to do so if you want to. In this way, marimo works as a replacement
-for both Jupyter and Streamlit.
+모든 marimo 노트북을 앱으로 공유할 필요는 없지만 원하는 경우 marimo를 사용하면 원활하게 공유할 수 있습니다. 이러한 방식으로 marimo는 Jupyter와 Streamlit 모두를 대체하는 역할을 합니다.
 <!---->
-## Cell order
+## 셀 순서
 
-In marimo, cells can be arranged in any order — marimo figures out the one true way to execute them based on variable declarations and references (in a ["topologically sorted"](https://en.wikipedia.org/wiki/Topological_sorting#:~:text=In%20computer%20science%2C%20a%20topological,before%20v%20in%20the%20ordering.) order)
+marimo에서는 셀을 어떤 순서로든 정렬할 수 있습니다. marimo는 변수 선언 및 참조를 기반으로 셀을 실행하는 유일한 올바른 방법을 알아냅니다(["위상 정렬된"](https://en.wikipedia.org/wiki/Topological_sorting#:~:text=In%20computer%20science%2C%20a%20topological,before%20v%20in%20the%20ordering.) 순서).
 
 ```python {.marimo}
 z.value
@@ -98,13 +86,13 @@ z.value
 z = mo.ui.slider(1, 10, label="$z$"); z
 ```
 
-This lets you arrange your cells in the way that makes the most sense to you. For example, put helper functions and imports at the bottom of a notebook, like an appendix.
+이렇게 하면 가장 합리적인 방식으로 셀을 정렬할 수 있습니다. 예를 들어 도우미 함수와 가져오기를 부록처럼 노트북 하단에 배치합니다.
 
-In contrast, Jupyter notebooks implicitly assume a top-to-bottom execution order.
+반대로 Jupyter 노트북은 암묵적으로 위에서 아래로 실행 순서를 가정합니다.
 <!---->
-## Re-assigning variables
+## 변수 재할당
 
-marimo disallows variable re-assignment. Here is something commonly done in Jupyter notebooks that cannot be done in marimo:
+marimo는 변수 재할당을 허용하지 않습니다. 다음은 Jupyter 노트북에서 일반적으로 수행되지만 marimo에서는 수행할 수 없는 작업입니다.
 
 ```python {.marimo}
 df = 0
@@ -118,56 +106,52 @@ df = 1
 results = df.groupby(["my_column"]).sum()
 ```
 
-**Explanation.** `results` depends on `df`, but which value of `df` should it use? Reactivity makes it impossible to answer this question in a sensible way, so marimo disallows variable reassignment.
+**설명.** `results`는 `df`에 의존하지만 어떤 `df` 값을 사용해야 할까요? 반응성으로 인해 이 질문에 합리적인 방식으로 답할 수 없으므로 marimo는 변수 재할당을 허용하지 않습니다.
 
-If you run into this error, here are your options:
+이 오류가 발생하면 다음 옵션을 사용할 수 있습니다.
 
-1. combine definitions into one cell
-2. prefix variables with an underscore (`_df`) to make them local to the cell
-3. wrap your code in functions, or give your variables more descriptive names
+1. 정의를 하나의 셀로 결합합니다.
+2. 변수 앞에 밑줄(`_df`)을 붙여 셀에 로컬로 만듭니다.
+3. 코드를 함수로 래핑하거나 변수에 더 설명적인 이름을 지정합니다.
 <!---->
-## Markdown
+## 마크다운
 
-marimo only has Python cells, but you can still write Markdown: `import marimo as mo` and use `mo.md` to write Markdown.
+marimo에는 Python 셀만 있지만 여전히 마크다운을 작성할 수 있습니다. `import marimo as mo`를 사용하고 `mo.md`를 사용하여 마크다운을 작성합니다.
 
 ```python {.marimo}
 mo.md(
     f"""
-    The value of {slider} is {slider.value}.
+    {slider}의 값은 {slider.value}입니다.
     """
 )
 ```
 
-**Explanation.** By lifting Markdown into Python, marimo lets you construct
-dynamic Markdown parameterized by arbitrary Python elements. marimo knows
-how to render its own elements, and you can use `mo.as_html` to render other
-objects, like plots.
+**설명.** 마크다운을 Python으로 가져옴으로써 marimo를 사용하면 임의의 Python 요소로 매개변수화된 동적 마크다운을 구성할 수 있습니다. marimo는 자체 요소를 렌더링하는 방법을 알고 있으며 `mo.as_html`을 사용하여 플롯과 같은 다른 개체를 렌더링할 수 있습니다.
 
-_Tip: toggle a markdown view via `Cmd/Ctrl-Shift-M` in an empty cell._
+_팁: 빈 셀에서 `Cmd/Ctrl-Shift-M`을 통해 마크다운 보기를 전환합니다._
 <!---->
-## Notebook files
+## 노트북 파일
 
-Jupyter saves notebooks as JSON files, with outputs serialized in them. This is helpful as a record of your plots and other results, but makes notebooks difficult to version and reuse.
+Jupyter는 노트북을 JSON 파일로 저장하고 출력을 직렬화합니다. 이는 플롯 및 기타 결과의 기록으로 유용하지만 노트북의 버전 관리 및 재사용을 어렵게 만듭니다.
 
-### marimo notebooks are Python scripts
-marimo notebooks are stored as pure Python scripts. This lets you version them with git, execute them with the command line, and re-use logic from one notebook in another.
+### marimo 노트북은 Python 스크립트입니다.
+marimo 노트북은 순수 Python 스크립트로 저장됩니다. 이를 통해 git으로 버전을 관리하고 명령줄로 실행하며 한 노트북의 논리를 다른 노트북에서 재사용할 수 있습니다.
 
-### marimo notebooks do not store outputs
-marimo does _not_ save your outputs in the file; if you want them saved, make sure to save them to disk with Python, or export to HTML via the notebook menu.
+### marimo 노트북은 출력을 저장하지 않습니다.
+marimo는 파일에 출력을 저장하지 _않습니다_. 출력을 저장하려면 Python을 사용하여 디스크에 저장하거나 노트북 메뉴를 통해 HTML로 내보내야 합니다.
 
-### marimo notebooks are versionable with git
+### marimo 노트북은 git으로 버전 관리가 가능합니다.
 
-marimo is designed so that small changes in your code yield small git diffs!
+marimo는 코드의 작은 변경 사항이 작은 git 차이점을 생성하도록 설계되었습니다!
 <!---->
-## Parting thoughts
+## 맺음말
 
-marimo is a **reinvention** of the Python notebook as a reproducible, interactive, and shareable Python program, instead of an error-prone scratchpad.
+marimo는 오류가 발생하기 쉬운 스크래치패드 대신 재현 가능하고 대화형이며 공유 가능한 Python 프로그램으로 Python 노트북을 **재창조**한 것입니다.
 
-We believe that the tools we use shape the way we think — better tools, for better minds. With marimo, we hope to provide the Python community with a better programming environment to do research and communicate it; to experiment with code and share it; to learn computational science and teach it.
+우리는 우리가 사용하는 도구가 우리의 사고방식을 형성한다고 믿습니다. 더 나은 도구는 더 나은 정신을 만듭니다. marimo를 통해 Python 커뮤니티에 연구를 수행하고 전달하고, 코드를 실험하고 공유하며, 계산 과학을 배우고 가르칠 수 있는 더 나은 프로그래밍 환경을 제공하고자 합니다.
 
-The marimo editor and library have many features not discussed here.
-Check out [our docs](https://docs.marimo.io/) to learn more!
+marimo 편집기와 라이브러리에는 여기에 설명되지 않은 많은 기능이 있습니다.
+자세한 내용은 [문서](https://docs.marimo.io/)를 확인하세요!
 
-_This guide was adapted from [Pluto for Jupyter
-users](https://featured.plutojl.org/basic/pluto%20for%20jupyter%20users).
-We ❤️ Pluto.jl!_
+_이 가이드는 [Jupyter 사용자를 위한 Pluto](https://featured.plutojl.org/basic/pluto%20for%20jupyter%20users)를 각색한 것입니다.
+우리는 Pluto.jl을 ❤️합니다!_

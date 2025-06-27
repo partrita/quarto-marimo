@@ -1,17 +1,16 @@
 ---
-title: Ui
+title: UI
 marimo-version: 0.13.2
+lang: ko
 header: |-
   # Copyright 2024 Marimo. All rights reserved.
 filters:
 - marimo-team/marimo
 ---
 
-# UI Elements
+# UI 요소
 
-One of marimo's most powerful features is its first-class
-support for interactive user interface (UI) elements: interacting
-with a UI element will automatically run cells that reference it.
+marimo의 가장 강력한 기능 중 하나는 대화형 사용자 인터페이스(UI) 요소에 대한 최고 수준의 지원입니다. UI 요소와 상호 작용하면 해당 요소를 참조하는 셀이 자동으로 실행됩니다.
 <!---->
 ## marimo.ui
 
@@ -21,63 +20,55 @@ slider
 
 mo.md(
     f"""
-    The `marimo.ui` module has a library of pre-built elements.
+    `marimo.ui` 모듈에는 미리 빌드된 요소 라이브러리가 있습니다.
 
-    For example, here's a `slider`: {slider}
+    예를 들어, 다음은 `슬라이더`입니다. {slider}
     """
 )
 ```
 
 ```python {.marimo}
-mo.md(f"and here's its value: **{slider.value}**.")
+mo.md(f"그리고 다음은 해당 값입니다. **{slider.value}**.")
 ```
 
-### How interactions run cells
+### 상호 작용이 셀을 실행하는 방식
 
-Whenever you interact with a UI element, its value is sent back to
-Python. When this happens, all cells that reference the global variable
-bound to the UI element, but don't define it, will run.
+UI 요소와 상호 작용할 때마다 해당 값이 Python으로 다시 전송됩니다. 이 경우 UI 요소에 바인딩된 전역 변수를 참조하지만 정의하지 않는 모든 셀이 실행됩니다.
 
-This simple rule lets you use UI elements to
-drive the execution of your program, letting you build
-interactive notebooks and tools for yourselves and others.
+이 간단한 규칙을 통해 UI 요소를 사용하여 프로그램 실행을 구동하고 자신과 다른 사람을 위한 대화형 노트북과 도구를 만들 수 있습니다.
 
 ```python {.marimo hide_code="true"}
 mo.accordion(
     {
-        "Tip: assign UI elements to global variables": (
+        "팁: UI 요소를 전역 변수에 할당합니다.": (
             """
-            Interacting with a displayed UI element will only 
-            trigger reactive execution if the UI element is assigned
-            to a global variable.
+            표시된 UI 요소와 상호 작용하면 UI 요소가 전역 변수에 할당된 경우에만 반응형 실행이 트리거됩니다.
             """
         ),
-        "Tip: accessing an element's value": (
+        "팁: 요소 값에 액세스합니다.": (
             """
-            Every UI element has a value attribute that you can access in 
-            Python.
+            모든 UI 요소에는 Python에서 액세스할 수 있는 값 속성이 있습니다.
             """
         ),
-        "Tip: embed UI elements in markdown": mo.md(
+        "팁: 마크다운에 UI 요소를 포함합니다.": mo.md(
             f"""
-            You can embed UI elements in markdown using f-strings.
+            f-문자열을 사용하여 마크다운에 UI 요소를 포함할 수 있습니다.
 
-            For example, we can render the slider here: {slider}
+            예를 들어, 여기에 슬라이더를 렌더링할 수 있습니다. {slider}
             """
         ),
     }
 )
 ```
 
-### Simple elements
+### 간단한 요소
 <!---->
-marimo has a [large library of simple UI elements](https://docs.marimo.io/api/inputs/index.html). Here are a just few examples:
+marimo에는 [간단한 UI 요소의 대규모 라이브러리](https://docs.marimo.io/api/inputs/index.html)가 있습니다. 다음은 몇 가지 예입니다.
 
 ```python {.marimo hide_code="true"}
 mo.md(
     """
-    See our [examples folder](https://github.com/marimo-team/marimo/tree/main/examples/ui) on GitHub for bite-sized notebooks showcasing all our UI elements. For
-    a more detailed reference, see our [API docs](https://docs.marimo.io/api/inputs/).
+    GitHub의 [예제 폴더](https://github.com/marimo-team/marimo/tree/main/examples/ui)에서 모든 UI 요소를 보여주는 간단한 노트북을 참조하세요. 자세한 내용은 [API 문서](https://docs.marimo.io/api/inputs/)를 참조하세요.
     """
 ).callout()
 ```
@@ -92,7 +83,7 @@ number.value
 ```
 
 ```python {.marimo}
-checkbox = mo.ui.checkbox(label="checkbox")
+checkbox = mo.ui.checkbox(label="확인란")
 checkbox
 ```
 
@@ -101,7 +92,7 @@ checkbox.value
 ```
 
 ```python {.marimo}
-text = mo.ui.text(placeholder="type some text ...")
+text = mo.ui.text(placeholder="텍스트를 입력하세요...")
 text
 ```
 
@@ -110,7 +101,7 @@ text.value
 ```
 
 ```python {.marimo}
-text_area = mo.ui.text_area(placeholder="type some text ...")
+text_area = mo.ui.text_area(placeholder="텍스트를 입력하세요...")
 text_area
 ```
 
@@ -128,12 +119,12 @@ dropdown.value
 ```
 
 ```python {.marimo}
-run_button = mo.ui.run_button(label="click me")
+run_button = mo.ui.run_button(label="클릭하세요")
 run_button
 ```
 
 ```python {.marimo}
-"Run button was clicked!" if run_button.value else "Click the run button!"
+"실행 버튼을 클릭했습니다!" if run_button.value else "실행 버튼을 클릭하세요!"
 ```
 
 ```python {.marimo}
@@ -146,7 +137,7 @@ file_upload.value
 ```
 
 ```python {.marimo}
-mo.md(f"To see more examples, use this dropdown: {basic_ui_elements}")
+mo.md(f"더 많은 예제를 보려면 이 드롭다운을 사용하세요. {basic_ui_elements}")
 ```
 
 ```python {.marimo}
@@ -162,18 +153,13 @@ value(selected_element)
 documentation(basic_ui_elements.value)
 ```
 
-### Composite elements
+### 복합 요소
 
-    Composite elements are advanced elements
-    let you build UI elements out of other UI elements.
+    복합 요소는 고급 요소로, 다른 UI 요소로 UI 요소를 만들 수 있습니다.
 
-    Use these powerful elements to logically group together related elements,
-    create a dynamic set of UI elements, or reduce the number of global
-    variables in your program.
+    이러한 강력한 요소를 사용하여 관련 요소를 논리적으로 그룹화하거나 동적 UI 요소 집합을 만들거나 프로그램의 전역 변수 수를 줄입니다.
 <!---->
-This first example shows how to create an array of UI elements using `mo.ui.array`.
-When you interact with an element in the array, all cells that reference the
-array are reactively run. If you instead used a regular Python list, cells referring to the list would _not_ be run.
+이 첫 번째 예는 `mo.ui.array`를 사용하여 UI 요소 배열을 만드는 방법을 보여줍니다. 배열의 요소와 상호 작용하면 배열을 참조하는 모든 셀이 반응적으로 실행됩니다. 대신 일반 Python 목록을 사용하면 목록을 참조하는 셀이 실행되지 _않습니다_.
 
 ```python {.marimo}
 array = mo.ui.array(
@@ -186,7 +172,7 @@ array
 array.value
 ```
 
-marimo also comes with `mo.ui.dictionary`, which is analogous to `mo.ui.array`
+marimo에는 `mo.ui.array`와 유사한 `mo.ui.dictionary`도 함께 제공됩니다.
 
 ```python {.marimo}
 dictionary = mo.ui.dictionary(
@@ -205,7 +191,7 @@ dictionary.value
 
 ```python {.marimo hide_code="true"}
 mo.md(
-    f"To see additional composite elements, use this dropdown: {composite_elements}"
+    f"추가 복합 요소를 보려면 이 드롭다운을 사용하세요. {composite_elements}"
 )
 ```
 
@@ -222,17 +208,12 @@ value(composite_element)
 documentation(composite_elements.value)
 ```
 
-### Building custom elements
+### 사용자 지정 요소 빌드
 
-marimo supports third-party UI elements through anywidget — this lets you build
-your own interactive UI elements, or use widgets built by others in the
-community. To learn more, [see our
-docs](https://docs.marimo.io/guides/integrating_with_marimo/custom_ui_plugins.html).
+marimo는 anywidget을 통해 타사 UI 요소를 지원합니다. 이를 통해 자신만의 대화형 UI 요소를 빌드하거나 커뮤니티의 다른 사람이 빌드한 위젯을 사용할 수 있습니다. 자세한 내용은 [문서](https://docs.marimo.io/guides/integrating_with_marimo/custom_ui_plugins.html)를 참조하세요.
 <!---->
-## Appendix
-The remaining cells are helper data structures and functions.
-You can look at their code if you're curious how certain parts of this
-tutorial were implemented.
+## 부록
+나머지 셀은 도우미 데이터 구조 및 함수입니다. 이 튜토리얼의 특정 부분이 어떻게 구현되었는지 궁금하다면 해당 코드를 볼 수 있습니다.
 
 ```python {.marimo}
 composite_elements = mo.ui.dropdown(
@@ -285,29 +266,29 @@ def construct_element(value):
     elif value == mo.ui.batch:
         return mo.md(
             """
-            - Name: {name}
-            - Date: {date}
+            - 이름: {name}
+            - 날짜: {date}
             """
         ).batch(name=mo.ui.text(), date=mo.ui.date())
     elif value == mo.ui.button:
         return mo.ui.button(
-            value=0, label="click me", on_click=lambda value: value + 1
+            value=0, label="클릭하세요", on_click=lambda value: value + 1
         )
     elif value == mo.ui.checkbox:
-        return mo.ui.checkbox(label="check me")
+        return mo.ui.checkbox(label="선택하세요")
     elif value == mo.ui.date:
         return mo.ui.date()
     elif value == mo.ui.dictionary:
         return mo.ui.dictionary(
             {
                 "slider": mo.ui.slider(1, 10),
-                "text": mo.ui.text("type something!"),
+                "text": mo.ui.text("무언가를 입력하세요!"),
                 "array": mo.ui.array(
                     [
                         mo.ui.button(value=0, on_click=lambda v: v + 1)
                         for _ in range(3)
                     ],
-                    label="buttons",
+                    label="버튼",
                 ),
             }
         )
@@ -332,11 +313,11 @@ def construct_element(value):
     elif value == mo.ui.tabs:
         return mo.ui.tabs(
             {
-                "Employee #1": {
+                "직원 #1": {
                     "first_name": "Michael",
                     "last_name": "Scott",
                 },
-                "Employee #2": {
+                "직원 #2": {
                     "first_name": "Dwight",
                     "last_name": "Schrute",
                 },
@@ -348,7 +329,7 @@ def construct_element(value):
                 {"first_name": "Michael", "last_name": "Scott"},
                 {"first_name": "Dwight", "last_name": "Schrute"},
             ],
-            label="Employees",
+            label="직원",
         )
     elif value == mo.ui.text:
         return mo.ui.text()
@@ -373,7 +354,7 @@ def value(element):
         )
         return mo.md(
             f"""
-            The element's current value is {mo.as_html(element.value)}
+            요소의 현재 값은 {mo.as_html(element.value)}입니다.
             """
         )
 ```
@@ -383,7 +364,7 @@ def documentation(element):
     if element is not None:
         return mo.accordion(
             {
-                f"Documentation on `mo.ui.{element.__name__}`": mo.doc(
+                f"`mo.ui.{element.__name__}`에 대한 문서": mo.doc(
                     element
                 )
             }

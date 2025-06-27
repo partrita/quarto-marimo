@@ -1,6 +1,7 @@
 ---
-title: Fileformat
+title: 파일 형식
 marimo-version: 0.13.2
+lang: ko
 header: |-
   # Copyright 2025 Marimo. All rights reserved
 filters:
@@ -16,46 +17,45 @@ import random
 import marimo as mo
 ```
 
-# File Format
+# 파일 형식
 
-marimo apps are stored as pure Python files.
+marimo 앱은 순수 Python 파일로 저장됩니다.
 
-These files are:
+이러한 파일은 다음과 같습니다.
 
-- 🤖 legible for both humans and machines
-- ✏️ formattable using your tool of choice
-- ➕ easily versioned with git, producing small diffs
-- 🐍 usable as Python  scripts, with UI  elements taking their default values
-- 🧩 modular, exposing functions and classes that can be imported from the notebook
+- 🤖 인간과 기계 모두 읽을 수 있습니다.
+- ✏️ 원하는 도구를 사용하여 형식을 지정할 수 있습니다.
+- ➕ git으로 쉽게 버전을 관리하고 작은 차이점을 생성합니다.
+- 🐍 UI 요소가 기본값을 사용하는 Python 스크립트로 사용할 수 있습니다.
+- 🧩 노트북에서 가져올 수 있는 함수와 클래스를 노출하는 모듈식입니다.
 <!---->
-## Example
+## 예제
 
-Consider a marimo notebook with the following four cells.
+다음 네 개의 셀이 있는 marimo 노트북을 고려해 보세요.
 
-First cell:
+첫 번째 셀:
 ```python3
 print(text.value)
 ```
 
-Second cell:
+두 번째 셀:
 ```python3
 def say_hello(name="World"):
     return f"Hello, {name}!"
 ```
 
-Third cell:
+세 번째 셀:
 ```python3
 text = mo.ui.text(value=say_hello())
 text
 ```
 
-Fourth cell:
+네 번째 셀:
 ```python3
 import marimo as mo
 ```
 <!---->
-For the above example, marimo would generate the following file
-contents:
+위의 예에서 marimo는 다음 파일 내용을 생성합니다.
 
 ```python3
 import marimo
@@ -87,36 +87,25 @@ if __name__ == "__main__":
     app.run()
 ```
 
-As you can see, this is _pure Python_. This is part of the reason why
-marimo's generated files are **git-friendly**: small changes made using
-the marimo editor result in small changes to the file that marimo
-generates.
+보시다시피 이것은 _순수 Python_입니다. 이것이 marimo에서 생성된 파일이 **git 친화적**인 이유 중 하나입니다. marimo 편집기를 사용하여 작은 변경 사항을 적용하면 marimo에서 생성하는 파일에 작은 변경 사항이 적용됩니다.
 
-Moreover, the cell defining a single pure function `say_hello` was saved "top-level" in the notebook file, making it possible for you to import it into other Python files or notebooks.
+또한 순수 함수 `say_hello` 하나를 정의하는 셀은 노트북 파일의 "최상위 수준"에 저장되어 다른 Python 파일이나 노트북으로 가져올 수 있습니다.
 <!---->
-## Properties
+## 속성
 
-marimo's file format was designed to be easy to read and easy
-to work with, while also serving the needs of the marimo library. You can
-even edit the generated file's cells directly, using your favorite text
-editor, and format the file with your favorite code formatter.
+marimo의 파일 형식은 읽기 쉽고 작업하기 쉽도록 설계되었으며 marimo 라이브러리의 요구 사항도 충족합니다. 즐겨 사용하는 텍스트 편집기를 사용하여 생성된 파일의 셀을 직접 편집하고 즐겨 사용하는 코드 포맷터를 사용하여 파일 형식을 지정할 수도 있습니다.
 
-We explain some properties of marimo's file format below.
+marimo 파일 형식의 몇 가지 속성을 아래에서 설명합니다.
 
 ````python {.marimo hide_code="true"}
 mo.accordion(
     {
-        "Cells are functions": """
-    In the `dataflow` tutorial, we saw that cells are like functions mapping
-    their refs (the global  variables they uses but don't define) to their
-    defs (the global variables they define). The generated code makes this
-    analogy explicit.
+        "셀은 함수입니다": """
+    `dataflow` 자습서에서 셀은 참조(사용하지만 정의하지 않는 전역 변수)를 정의(정의하는 전역 변수)에 매핑하는 함수와 같다는 것을 확인했습니다. 생성된 코드는 이 비유를 명시적으로 보여줍니다.
 
-    In the generated code, there is a function for each cell. The arguments
-    of  the function are the cell's refs , and its returned variables are
-    its defs that are referenced by other cells.
+    생성된 코드에는 각 셀에 대한 함수가 있습니다. 함수의 인수는 셀의 참조이고 반환된 변수는 다른 셀에서 참조하는 정의입니다.
 
-    For example, the code
+    예를 들어 다음 코드는
 
     ```python3
     @app.cell
@@ -126,10 +115,9 @@ mo.accordion(
         return text,
     ```
 
-    says that the cell takes as input a variable called `mo`, and it creates
-    a global variable called `text` (that is read by another cell).
+    셀이 `mo`라는 변수를 입력으로 사용하고 `text`라는 전역 변수(다른 셀에서 읽음)를 만든다는 것을 나타냅니다.
 
-    In contrast, the code
+    반대로 다음 코드는
 
     ```python3
     @app.cell
@@ -138,29 +126,18 @@ mo.accordion(
         return mo,
     ```
 
-    says that the cell doesn't depend on any other cells (its argument list
-    is  empty), though it does create the variable `mo` which the previous
-    cell requires as input.
+    셀이 다른 셀에 의존하지 않지만(인수 목록이 비어 있음) 이전 셀에 입력으로 필요한 `mo` 변수를 만든다는 것을 나타냅니다.
     """,
-        "Cells are stored in presentation order": """
-    Cells are stored in the order that they are arranged in the marimo
-    editor. So if you want to rearrange
-    your cells using your favorite text editor, just rearrange the
-    order that they're defined in the file.
+        "셀은 프레젠테이션 순서로 저장됩니다": """
+    셀은 marimo 편집기에서 정렬된 순서대로 저장됩니다. 따라서 즐겨 사용하는 텍스트 편집기를 사용하여 셀을 다시 정렬하려면 파일에 정의된 순서를 다시 정렬하기만 하면 됩니다.
     """,
-        "Text formatting is preserved": """
-    marimo guarantees that however your source code was
-    formatted in the marimo editor is exactly how it will be stored in
-    the generated code. For example, whitespace, line breaks, and so on are
-    all preserved exactly. This means that you can touch up formatting in
-    your text editor, either manually or using automated formatters like
-    Black, and be confident that your changes will be preserved.
+        "텍스트 서식이 유지됩니다": """
+    marimo는 marimo 편집기에서 소스 코드의 서식이 지정된 방식 그대로 생성된 코드에 저장되도록 보장합니다. 예를 들어 공백, 줄 바꿈 등은 모두 정확하게 유지됩니다. 즉, 텍스트 편집기에서 수동으로 또는 Black과 같은 자동 포맷터를 사용하여 서식을 수정하고 변경 사항이 유지될 것이라고 확신할 수 있습니다.
     """,
-        "Cell functions can have names": """
-    If you want to, you can replace the default names for cell functions
-    with meaningful ones.
+        "셀 함수에 이름을 지정할 수 있습니다": """
+    원하는 경우 셀 함수의 기본 이름을 의미 있는 이름으로 바꿀 수 있습니다.
 
-    For example, change
+    예를 들어 다음을 변경합니다.
 
     ```python3
     @app.cell
@@ -169,7 +146,7 @@ mo.accordion(
         return
     ```
 
-    to
+    다음으로:
 
     ```python3
     @app.cell
@@ -178,105 +155,89 @@ mo.accordion(
         return
     ```
 
-    This can make the generated code more readable.
+    이렇게 하면 생성된 코드를 더 읽기 쉽게 만들 수 있습니다.
     """,
-        "No magical tokens": """
-    marimo's generated code is pure Python; no magical syntax.
+        "마법 토큰 없음": """
+    marimo에서 생성된 코드는 순수 Python이며 마법 구문이 없습니다.
     """,
-        "Cell signatures automatically maintained": """
-    If when editing a cell, you forget to include all a cell's refs in its
-    argument list, or all its defs in its returns, marimo will fix them he next
-    time you try to open it in the marimo editor. So don't worry that you'll
-    botch a cell's signature when editing it.
+        "셀 서명이 자동으로 유지됩니다": """
+    셀을 편집할 때 셀의 모든 참조를 인수 목록에 포함하거나 모든 정의를 반환 값에 포함하는 것을 잊어버린 경우 marimo 편집기에서 다음에 열려고 할 때 marimo가 수정합니다. 따라서 셀을 편집할 때 셀 서명을 망칠까 봐 걱정하지 마십시오.
     """,
-        "The `app` object": """
-    At the top of the generated code, a variable named `app` is created.
-    This object collects the cells into a dataflow graph, using the `cell`
-    decorator.
+        "`app` 개체": """
+    생성된 코드 상단에 `app`이라는 변수가 만들어집니다. 이 개체는 `cell` 데코레이터를 사용하여 셀을 데이터 흐름 그래프로 수집합니다.
     """,
-        "Runnable as a script": """
-    You can run marimo apps as scripts at the command line,
-    using Python. This will execute the cells in a
-    topologically sorted order, just as they would run if you opened the app
-    with `marimo edit`.
+        "스크립트로 실행 가능": """
+    Python을 사용하여 명령줄에서 marimo 앱을 스크립트로 실행할 수 있습니다. 이렇게 하면 `marimo edit`으로 앱을 열 때와 마찬가지로 토폴로지 정렬 순서로 셀이 실행됩니다.
 
-    For example: running our example as a script would print `Hello
-    World!` to the console.
+    예를 들어 예제를 스크립트로 실행하면 콘솔에 `Hello World!`가 인쇄됩니다.
     """,
-        """Usable as a module""": """
-    Import top-level functions and classes from the notebook into other
-    Python files.
+        """모듈로 사용 가능""": """
+    노트북의 최상위 함수 및 클래스를 다른 Python 파일로 가져옵니다.
     """,
     }
 )
 ````
 
-## Importing functions and classes from notebooks
+## 노트북에서 함수 및 클래스 가져오기
 
-The details of marimo's file format are important if you want to import
-functions and classes defined in your notebook into other Python modules. If you
-don't intend to do so, you can skip this section.
+노트북에 정의된 함수와 클래스를 다른 Python 모듈로 가져오려면 marimo 파일 형식의 세부 정보가 중요합니다. 그렇게 할 의도가 없다면 이 섹션을 건너뛰어도 됩니다.
 <!---->
-### Declaring imports used by functions and classes
+### 함수 및 클래스에서 사용하는 가져오기 선언
 
-marimo can serialize functions and classes into the top-level of a file, so you can import them with regular Python syntax:
+marimo는 함수와 클래스를 파일의 최상위 수준으로 직렬화할 수 있으므로 일반 Python 구문을 사용하여 가져올 수 있습니다.
 
 ```python
 from my_notebook import my_function
 ```
 
-In particular, if a cell defines just a single function or class, and if that function or class is pure
-save for references to variables defined in a special **setup cell**, it will be serialized top-level.
+특히 셀이 단일 함수 또는 클래스만 정의하고 해당 함수 또는 클래스가 특수 **설정 셀**에 정의된 변수에 대한 참조를 제외하고 순수한 경우 최상위 수준으로 직렬화됩니다.
 
-**Setup cell.** Notebooks can optionally include a setup cell that imports modules,
-written in the file as:
+**설정 셀.** 노트북에는 선택적으로 모듈을 가져오는 설정 셀이 포함될 수 있으며 파일에 다음과 같이 작성됩니다.
 
-<!-- note this setup cell is hardcoded in the playground example -->
+<!-- 이 설정 셀은 플레이그라운드 예제에 하드코딩되어 있습니다. -->
 ```python
 with app.setup:
     import marimo as mo
     import dataclasses
 ```
 
-Modules imported in a setup cell can be used in "top-level" functions or
-classes. You can add the setup cell from the general menu of the editor under:
-::lucide:diamond-plus:: Add setup cell.
+설정 셀에서 가져온 모듈은 "최상위 수준" 함수 또는 클래스에서 사용할 수 있습니다. 편집기의 일반 메뉴에서 다음 위치에 설정 셀을 추가할 수 있습니다. ::lucide:diamond-plus:: 설정 셀 추가.
 <!---->
-### Functions and classes
+### 함수 및 클래스
 
-Notebook files expose functions and classes that depend only on variables defined in the setup cell (or on other such functions or classes). For example, the following cell:
+노트북 파일은 설정 셀(또는 다른 유사한 함수 또는 클래스)에 정의된 변수에만 의존하는 함수와 클래스를 노출합니다. 예를 들어 다음 셀은 다음과 같습니다.
 
 ```python {.marimo name="*roll_die"}
 def roll_die():
     """
-    A reusable function.
+    재사용 가능한 함수입니다.
 
-    Notice the indicator in the bottom right of the cell.
+    셀 오른쪽 하단의 표시기를 확인하세요.
     """
     return random.randint(1, 7)
 ```
 
-... is saved in the notebook file as
+... 노트북 파일에 다음과 같이 저장됩니다.
 
 ```python
 @app.function
 def roll_die():
     '''
-    A reusable function.
+    재사용 가능한 함수입니다.
 
-    Notice the indicator in the bottom right of the cell.
+    셀 오른쪽 하단의 표시기를 확인하세요.
     '''
     return random.randint(1, 7)
 ```
 
 
-Making it importable as
+다음과 같이 가져올 수 있도록 만듭니다.
 
 ```python
 from my_notebook import roll_die
 ```
 <!---->
-Standalone classes are also exposed:
+독립 실행형 클래스도 노출됩니다.
 
 ```python {.marimo name="*SimulationExample"}
 @dataclasses.dataclass
@@ -287,7 +248,7 @@ class SimulationExample:
         return [roll_die() for _ in range(self.n_rolls)]
 ```
 
-This class is saved in the file as
+이 클래스는 파일에 다음과 같이 저장됩니다.
 
 ```python
 @app.class_definition
@@ -299,15 +260,13 @@ class SimulationExample:
         return [roll_die() for _ in range(self.n_rolls)]
 ```
 <!---->
-/// attention | Heads up
+/// attention | 주의
 ///
 
-Not all standalone functions will be exposed in the module. If your
-function depends on variables that are defined in other cells, then it won't
-be exposed top-level.
+모든 독립 실행형 함수가 모듈에 노출되는 것은 아닙니다. 함수가 다른 셀에 정의된 변수에 의존하는 경우 최상위 수준으로 노출되지 않습니다.
 
 
-For example, this function will not be exposed:
+예를 들어 이 함수는 노출되지 않습니다.
 
 ```python {.marimo}
 variable = 123
@@ -316,32 +275,30 @@ variable = 123
 ```python {.marimo name="wrapped_function_example"}
 def not_a_top_level_function():
     """
-    This function depends on a variable declared in another cell.
+    이 함수는 다른 셀에 선언된 변수에 의존합니다.
 
-    As a result this function isn't exposed in the file — and the tooltip in the
-    bottom-right corner indicates this.
+    결과적으로 이 함수는 파일에 노출되지 않으며 오른쪽 하단 모서리의 도구 설명에 이 내용이 표시됩니다.
     """
     return variable
 ```
 
-## FAQ
+## 자주 묻는 질문
 
-### I want to edit notebooks in a different editor, what do I need to know?
+### 다른 편집기에서 노트북을 편집하고 싶은데 무엇을 알아야 하나요?
 
-See the docs on [using your own editor](https://docs.marimo.io/guides/editor_features/watching/).
+[자신만의 편집기 사용](https://docs.marimo.io/guides/editor_features/watching/)에 대한 문서를 참조하세요.
 
-### I want to import functions from a marimo notebook, what do I need to know?
+### marimo 노트북에서 함수를 가져오고 싶은데 무엇을 알아야 하나요?
 
-See the docs on [reusable functions and
-classes](https://links.marimo.app/reusable-functions).
+[재사용 가능한 함수 및 클래스](https://links.marimo.app/reusable-functions)에 대한 문서를 참조하세요.
 
-### I want to run pytest on marimo notebooks, what do I need to know?
+### marimo 노트북에서 pytest를 실행하고 싶은데 무엇을 알아야 하나요?
 
-See the docs on [testing](https://docs.marimo.io/guides/testing/).
+[테스트](https://docs.marimo.io/guides/testing/)에 대한 문서를 참조하세요.
 <!---->
-## This notebook's source code
+## 이 노트북의 소스 코드
 
-The source code of this notebook is shown below:
+이 노트북의 소스 코드는 다음과 같습니다.
 
 ```python {.marimo}
 with open(__file__, "r", encoding="utf-8") as f:

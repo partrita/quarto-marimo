@@ -2,15 +2,14 @@
 title: Sql
 marimo-version: 0.13.2
 width: medium
+lang: ko
 ---
 
-# Hello, SQL!
+# 안녕하세요, SQL!
 
-_Let's dive into the world of SQL where we don't just address tables, we also join them!_
+_테이블을 다루는 것뿐만 아니라 조인도 하는 SQL의 세계로 뛰어들어 봅시다!_
 <!---->
-With marimo, you can mix-and-match both **Python and SQL**. To create a
-SQL cell, you first need to install some additional dependencies,
-including [duckdb](https://duckdb.org/). Obtain these dependencies with
+marimo를 사용하면 **Python과 SQL**을 혼합하여 사용할 수 있습니다. SQL 셀을 만들려면 먼저 [duckdb](https://duckdb.org/)를 포함한 몇 가지 추가 종속성을 설치해야 합니다. 다음을 사용하여 이러한 종속성을 얻습니다.
 
 ```bash
 pip install 'marimo[sql]'
@@ -47,9 +46,9 @@ if has_duckdb_installed:
     mo.output.replace(
         mo.md(
             """
-            /// Tip | "Installed"
+            /// 팁 | "설치됨"
 
-                If you see this, DuckDB is already installed.
+                이것이 보이면 DuckDB가 이미 설치된 것입니다.
             ///
             """
         )
@@ -58,50 +57,41 @@ else:
     mo.output.replace(
         mo.md(
             """
-            /// Warning | "Not Installed"
-                If you see this, DuckDB is not installed.
+            /// 경고 | "설치되지 않음"
+                이것이 보이면 DuckDB가 설치되지 않은 것입니다.
             ///
             """
         )
     )
 ```
 
-## Creating SQL cells
+## SQL 셀 만들기
 
-Once the required dependencies are installed, you can create SQL cells
-in one of the following ways:
+필요한 종속성이 설치되면 다음 방법 중 하나로 SQL 셀을 만들 수 있습니다.
 
-- right click the **Add Cell** ::lucide:circle-plus:: buttons on the left of
-a cell;
--  click the **Convert to SQL** ::lucide:database:: button in the cell menu ::lucide:ellipsis::
--  click the **Add SQL Cell** at the bottom of the page;
+- 셀 왼쪽의 **셀 추가** ::lucide:circle-plus:: 버튼을 마우스 오른쪽 버튼으로 클릭합니다.
+- 셀 메뉴 ::lucide:ellipsis::에서 **SQL로 변환** ::lucide:database:: 버튼을 클릭합니다.
+- 페이지 하단의 **SQL 셀 추가**를 클릭합니다.
 
-## Python representation
-marimo is still just Python, even when using SQL. Here is an example of
-how marimo embeds SQL in Python in its file format:
+## Python 표현
+marimo는 SQL을 사용할 때도 여전히 Python입니다. 다음은 marimo가 파일 형식에서 Python에 SQL을 포함하는 방법의 예입니다.
 
 ```python
 output_df = mo.sql(f"SELECT * FROM my_table LIMIT {max_rows.value}")
 ```
 
-Notice that we have an **`output_df`** variable in the cell. This is a
-resulting Polars DataFrame (if you have `polars` installed) or a Pandas
-DataFrame (if you don't). One of them must be installed in order to
-interact with the SQL result.
+셀에 **`output_df`** 변수가 있음을 확인합니다. 이것은 결과 Polars DataFrame(`polars`가 설치된 경우) 또는 Pandas DataFrame(설치되지 않은 경우)입니다. SQL 결과와 상호 작용하려면 둘 중 하나가 설치되어 있어야 합니다.
 
-The SQL statement itself is an formatted string (f-string), so this
-means they can contain any valid Python code, such as the values of UI
-elements. This means your SQL statement and results can be reactive! 🚀
+SQL 문 자체는 형식이 지정된 문자열(f-문자열)이므로 UI 요소의 값과 같은 유효한 Python 코드를 포함할 수 있습니다. 즉, SQL 문과 결과가 반응형이 될 수 있습니다! 🚀
 <!---->
-## Querying dataframes with SQL
+## SQL로 데이터프레임 쿼리하기
 <!---->
-/// Tip | "Data sources panel"
+/// 팁 | "데이터 소스 패널"
 
-    Click the database "barrel" icon in the left toolbar to see all dataframes and in-
-    memory tables that your notebook has access to.
+    왼쪽 도구 모음에서 데이터베이스 "배럴" 아이콘을 클릭하면 노트북에서 액세스할 수 있는 모든 데이터프레임과 메모리 내 테이블을 볼 수 있습니다.
 ///
 <!---->
-Let's take a look at a SQL cell. The next cell generates a dataframe called `df`.
+SQL 셀을 살펴보겠습니다. 다음 셀은 `df`라는 데이터프레임을 생성합니다.
 
 ```python {.marimo hide_code="true"}
 _SIZE = 1000
@@ -132,57 +122,57 @@ def _create_token_data(n_items=100):
 
 _data = _create_token_data(_SIZE)
 
-# Try polars
+# polars 시도
 if has_polars_installed:
     import polars as pl
 
     df = pl.DataFrame(_data)
-# Fallback to pandas (maybe trying to install it)
+# pandas로 대체 (설치 시도 중일 수 있음)
 else:
     import pandas as pd
 
     df = pd.DataFrame(_data)
 ```
 
-Next, we create a SQL query, refercing the Python dataframe `df` directly.
+다음으로 Python 데이터프레임 `df`를 직접 참조하는 SQL 쿼리를 만듭니다.
 
 ```sql {.marimo}
--- This SQL cell is special since we can reference existing dataframes in the global scope as a table in the SQL query. For example, we can reference the `df` dataframe in the global scope, which was defined in another cell using Python.
+-- 이 SQL 셀은 전역 범위의 기존 데이터프레임을 SQL 쿼리의 테이블로 참조할 수 있으므로 특별합니다. 예를 들어 Python을 사용하여 다른 셀에서 정의된 전역 범위의 `df` 데이터프레임을 참조할 수 있습니다.
 
 SELECT * FROM df;
 
--- By default, the output variable starts with an underscore (`_df`), making it private to this cell. To access the query result in another cell, change the name of the output variable.
+-- 기본적으로 출력 변수는 밑줄(`_df`)로 시작하여 이 셀에 비공개로 만듭니다. 다른 셀에서 쿼리 결과에 액세스하려면 출력 변수의 이름을 변경합니다.
 ```
 
-## From Python to SQL and back
+## Python에서 SQL로, 다시 SQL에서 Python으로
 <!---->
-You can create SQL statements that depend on Python values, such as UI elements:
+UI 요소와 같은 Python 값에 따라 달라지는 SQL 문을 만들 수 있습니다.
 
 ```python {.marimo hide_code="true"}
 token_prefix = mo.ui.dropdown(
-    list(string.ascii_lowercase), label="token prefix", value="a"
+    list(string.ascii_lowercase), label="토큰 접두사", value="a"
 )
 token_prefix
 ```
 
 ```sql {.marimo query="result"}
--- Change the dropdown to see the SQL query filter itself!
+-- SQL 쿼리 필터 자체를 보려면 드롭다운을 변경합니다!
 --
--- Here we use a duckdb function called `starts_with`:
+-- 여기서는 `starts_with`라는 duckdb 함수를 사용합니다.
 SELECT * FROM df WHERE starts_with(token, '{token_prefix.value}')
 
--- Notice that we named the output variable `result`
+-- 출력 변수의 이름을 `result`로 지정했습니다.
 ```
 
-Since we named the output variable above **`result`**,
-we can use it back in Python.
+위에서 출력 변수의 이름을 **`result`**로 지정했으므로
+Python에서 다시 사용할 수 있습니다.
 
 ```python {.marimo hide_code="true"}
 charting_library = mo.ui.radio(["matplotlib", "altair", "plotly"])
 
 mo.md(
     f"""
-    Let's chart the result with a library of your choice:
+    선택한 라이브러리로 결과를 차트로 만들어 보겠습니다.
 
     {charting_library}
     """
@@ -192,10 +182,9 @@ mo.md(
 ```python {.marimo hide_code="true"}
 _header = mo.md(
     f"""
-    We can re-use the dropdown from above: {token_prefix}
+    위의 드롭다운을 다시 사용할 수 있습니다. {token_prefix}
 
-    Now we have a histogram visualizing the token count distribution of tokens starting
-    with {token_prefix.value}, powered by your SQL query and UI element.
+    이제 SQL 쿼리 및 UI 요소로 구동되는 {token_prefix.value}로 시작하는 토큰의 토큰 수 분포를 시각화하는 히스토그램이 있습니다.
     """
 )
 
@@ -224,7 +213,7 @@ def render_matplotlib():
     import matplotlib.pyplot as plt
 
     plt.hist(result["count"], label=token_prefix.value)
-    plt.xlabel("token count")
+    plt.xlabel("토큰 수")
     plt.legend()
     plt.tight_layout()
     return plt.gcf()
@@ -247,29 +236,29 @@ def render_plotly():
     return go.Figure(data=[go.Histogram(x=result["count"])])
 ```
 
-## CSVs, Parquet, Postgres, and more ...
+## CSV, Parquet, Postgres 등 ...
 <!---->
-We're not limited to querying dataframes. We can also query an **HTTP URL, S3 path, or a file path to a local csv or parquet file**.
+데이터프레임 쿼리에만 국한되지 않습니다. **HTTP URL, S3 경로 또는 로컬 csv 또는 parquet 파일의 파일 경로**도 쿼리할 수 있습니다.
 
 ```sql
--- or
+-- 또는
 SELECT * FROM 's3://my-bucket/file.parquet';
--- or
+-- 또는
 SELECT * FROM read_csv('path/to/example.csv');
--- or
+-- 또는
 SELECT * FROM read_parquet('path/to/example.parquet');
 ```
 
-With a bit of boilerplate, you can even read and write to **Postgres**, and join Postgres tables with dataframes in the same query. For a full list of supported data sources, check out the [duckdb extensions](https://duckdb.org/docs/extensions/overview) and our [example notebook on duckdb connections](https://github.com/marimo-team/marimo/blob/main/examples/sql/duckdb_connections.**py**).
+약간의 상용구를 사용하면 **Postgres**를 읽고 쓸 수 있으며 동일한 쿼리에서 Postgres 테이블을 데이터프레임과 조인할 수도 있습니다. 지원되는 데이터 소스의 전체 목록은 [duckdb 확장](https://duckdb.org/docs/extensions/overview) 및 [duckdb 연결에 대한 예제 노트북](https://github.com/marimo-team/marimo/blob/main/examples/sql/duckdb_connections.**py**)을 확인하십시오.
 
-For this example, we will query an HTTP endpoint of a csv.
+이 예에서는 csv의 HTTP 엔드포인트를 쿼리합니다.
 
 ```sql {.marimo query="cars"}
--- Download a CSV and create an in-memory table; this is optional.
+-- CSV를 다운로드하고 메모리 내 테이블을 만듭니다. 이것은 선택 사항입니다.
 CREATE OR replace TABLE cars as
 FROM 'https://datasets.marimo.app/cars.csv';
 
--- Query the table
+-- 테이블 쿼리
 SELECT * from cars;
 ```
 
@@ -294,13 +283,13 @@ WHERE
 ```python {.marimo hide_code="true"}
 mo.hstack(
     [
-        mo.stat(label="Total cars", value=str(len(filtered_cars))),
+        mo.stat(label="총 자동차 수", value=str(len(filtered_cars))),
         mo.stat(
-            label="Average MPG Highway",
+            label="평균 고속도로 연비",
             value=f"{filtered_cars['MPG_Highway'].mean() or 0:.1f}",
         ),
         mo.stat(
-            label="Average MPG City",
+            label="평균 시내 연비",
             value=f"{filtered_cars['MPG_City'].mean() or 0:.1f}",
         ),
     ]

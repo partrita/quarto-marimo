@@ -1,51 +1,43 @@
 ---
-title: Markdown
+title: 마크다운
 marimo-version: 0.13.2
+lang: ko
 ---
 
-# Hello, Markdown!
+# 안녕하세요, 마크다운!
 
-Use marimo's "`md`" function to write markdown. This function compiles Markdown into HTML that marimo can display.
+marimo의 "`md`" 함수를 사용하여 마크다운을 작성합니다. 이 함수는 마크다운을 marimo가 표시할 수 있는 HTML로 컴파일합니다.
 
-For example, here's the code that rendered the above title and
-paragraph:
+예를 들어, 위 제목과 단락을 렌더링한 코드는 다음과 같습니다.
 
 ```python3
 mo.md(
     '''
-    # Hello, Markdown!
+    # 안녕하세요, 마크다운!
 
-    Use marimo's "`md`" function to embed rich text into your marimo
-    apps. This function compiles your Markdown into HTML that marimo
-    can display.
+    marimo의 "`md`" 함수를 사용하여 서식 있는 텍스트를 marimo 앱에 포함합니다. 이 함수는 마크다운을 marimo가 표시할 수 있는 HTML로 컴파일합니다.
     '''
 )
 ```
 <!---->
-**Tip: toggling between the Markdown and Python editor**
+**팁: 마크다운 편집기와 Python 편집기 간 전환**
 
-Although markdown is written with `mo.md`, marimo provides a markdown editor
-that hides this boilerplate from you.
+마크다운은 `mo.md`로 작성되지만 marimo는 이 상용구를 숨기는 마크다운 편집기를 제공합니다.
 
-Toggle between the Markdown and Python
-editors by clicking the blue icon in the top-right of the editor,
-entering `Ctrl/Cmd+Shift+M`, or using the "cell actions menu". You can
-also **hide** the markdown editor through the cell actions menu.
+편집기 오른쪽 상단의 파란색 아이콘을 클릭하거나 `Ctrl/Cmd+Shift+M`을 입력하거나 "셀 작업 메뉴"를 사용하여 마크다운 편집기와 Python 편집기 간을 전환합니다. 셀 작업 메뉴를 통해 마크다운 편집기를 **숨길** 수도 있습니다.
 
-**Tip**: To interpolate Python values into markdown strings, you'll
-need to use `mo.md(f"...")` directly; the markdown view does not support
-f-strings.
+**팁**: Python 값을 마크다운 문자열에 보간하려면 `mo.md(f"...")`를 직접 사용해야 합니다. 마크다운 보기에서는 f-문자열을 지원하지 않습니다.
 <!---->
 ## LaTeX
-You can embed LaTeX in Markdown.
+마크다운에 LaTeX를 포함할 수 있습니다.
 
-For example,
+예를 들어,
 
 ```python3
 mo.md(r'$f : \mathbf{R} \to \mathbf{R}$')
 ```
 
-renders $f : \mathbf{R} \to \mathbf{R}$, while
+는 $f : \mathbf{R} \to \mathbf{R}$를 렌더링하고,
 
 ```python3
 mo.md(
@@ -57,7 +49,7 @@ mo.md(
 )
 ```
 
-renders the display math
+는 디스플레이 수학을 렌더링합니다.
 
 \[
 f: \mathbf{R} \to \mathbf{R}.
@@ -66,9 +58,8 @@ f: \mathbf{R} \to \mathbf{R}.
 ```python {.marimo hide_code="true"}
 mo.accordion(
     {
-        "Tip: `r''` strings": mo.md(
-            "Use `r''` strings to remove the need to escape backslashes"
-            " when writing LaTeX."
+        "팁: `r''` 문자열": mo.md(
+            "LaTeX를 작성할 때 백슬래시를 이스케이프할 필요가 없도록 `r''` 문자열을 사용합니다."
         )
     }
 )
@@ -77,25 +68,20 @@ mo.accordion(
 ```python {.marimo hide_code="true"}
 mo.accordion(
     {
-        "Note: KaTeX": mo.md(
+        "참고: KaTeX": mo.md(
             """
-            marimo actually uses KaTeX, a math typesetting library for the
-            web which supports a subset of LaTeX. For a list of
-            (un)supported commands, visit
-            https://katex.org/docs/support_table
+            marimo는 실제로 웹용 수학 조판 라이브러리인 KaTeX를 사용하며 LaTeX의 하위 집합을 지원합니다. (미)지원 명령 목록은 https://katex.org/docs/support_table을 참조하세요.
             """
         )
     }
 )
 ```
 
-## Interpolating Python values
+## Python 값 보간
 
-You can interpolate Python values into markdown using
-`f-strings` and marimo's ` as_html` function. This lets you create
-markdown whose contents depend on data that changes at runtime.
+`f-문자열`과 marimo의 `as_html` 함수를 사용하여 Python 값을 마크다운에 보간할 수 있습니다. 이를 통해 런타임에 변경되는 데이터에 따라 내용이 달라지는 마크다운을 만들 수 있습니다.
 
-Here are some examples.
+다음은 몇 가지 예입니다.
 
 ````python {.marimo}
 def _sine_plot():
@@ -105,15 +91,15 @@ def _sine_plot():
 
 mo.md(
     f"""
-    ### Plots
-    A matplotlib figure:
+    ### 플롯
+    matplotlib 그림:
 
     ```python3
     _x = np.linspace(start=0, stop=2*np.pi)
     sine_plot = plt.plot(_x, np.sin(_x))
     mo.md(f"{{mo.as_html(sine_plot)}}")
     ```
-    yields
+    결과:
 
     {mo.as_html(_sine_plot())}
     """
@@ -125,16 +111,16 @@ leaves = mo.ui.slider(1, 32, label="🍃: ")
 
 mo.md(
     f"""
-    ### UI elements
+    ### UI 요소
 
-    A `marimo.ui` object:
+    `marimo.ui` 개체:
 
     ```python3
     leaves = mo.ui.slider(1, 16, label="🍃: ")
     mo.md(f"{{leaves}}")
     ```
 
-    yields
+    결과:
 
     {leaves}
     """
@@ -142,15 +128,14 @@ mo.md(
 ````
 
 ```python {.marimo}
-mo.md(f"Your leaves: {'🍃' * leaves.value}")
+mo.md(f"나뭇잎: {'🍃' * leaves.value}")
 ```
 
 ```python {.marimo hide_code="true"}
 mo.accordion(
     {
-        "Tip: UI elements can format themselves": """
-        marimo objects know how to format themselves, so you can omit the
-        call to `as_html`.
+        "팁: UI 요소는 자체적으로 형식을 지정할 수 있습니다.": """
+        marimo 개체는 자체적으로 형식을 지정하는 방법을 알고 있으므로 `as_html` 호출을 생략할 수 있습니다.
         """
     }
 )
@@ -166,18 +151,17 @@ def make_dataframe():
 
 mo.md(
     f"""
-    ### Other objects
+    ### 기타 개체
 
-    Use `mo.as_html` to convert objects to HTML. This function
-    generates rich HTML for many Python types, including:
+    `mo.as_html`을 사용하여 개체를 HTML로 변환합니다. 이 함수는 다음을 포함하여 많은 Python 유형에 대해 서식 있는 HTML을 생성합니다.
 
-    - lists, dicts, and tuples,
-    - `pandas` dataframes and series,
-    - `seaborn` figures,
-    - `plotly` figures, and
-    - `altair` figures.
+    - 목록, 사전 및 튜플,
+    - `pandas` 데이터프레임 및 시리즈,
+    - `seaborn` 그림,
+    - `plotly` 그림,
+    - `altair` 그림.
 
-    For example, here's a Polars dataframe:
+    예를 들어, 다음은 Polars 데이터프레임입니다.
 
     {mo.as_html(make_dataframe())}
     """
@@ -187,29 +171,25 @@ mo.md(
 ```python {.marimo hide_code="true"}
 mo.accordion(
     {
-        "Tip: outputs are automatically converted to HTML": """
-        `mo.as_html` is only needed when interpolating objects into
-        markdown; the last expression of a cell (its output) is
-        converted to HTML automatically.
+        "팁: 출력은 자동으로 HTML로 변환됩니다.": """
+        `mo.as_html`은 개체를 마크다운에 보간할 때만 필요합니다. 셀의 마지막 표현식(출력)은 자동으로 HTML로 변환됩니다.
         """
     }
 )
 ```
 
-## Putting it all together
+## 종합
 
-Here's a more interesting example that puts together
-everything we've learned: rendering markdown with LaTeX that depends on
-the values of Python objects.
+다음은 지금까지 배운 모든 것을 종합한 더 흥미로운 예입니다. Python 개체의 값에 따라 달라지는 LaTeX를 사용하여 마크다운을 렌더링합니다.
 
 ```python {.marimo}
-amplitude = mo.ui.slider(1, 2, step=0.1, label="amplitude: ")
+amplitude = mo.ui.slider(1, 2, step=0.1, label="진폭: ")
 period = mo.ui.slider(
     math.pi / 4,
     4 * math.pi,
     value=2 * math.pi,
     step=math.pi / 8,
-    label="period: ",
+    label="주기: ",
 )
 ```
 
@@ -225,7 +205,7 @@ def plotsin(amplitude, period):
 ```python {.marimo}
 mo.md(
     f"""
-    **A sin curve.**
+    **사인 곡선.**
 
     - {amplitude}
     - {period}
@@ -236,13 +216,13 @@ mo.md(
 ```python {.marimo}
 mo.md(
     rf"""
-    You're viewing the graph of
+    다음 그래프를 보고 있습니다.
 
     \[
     f(x) = {amplitude.value}\sin((2\pi/{period.value:0.2f})x),
     \]
 
-    with $x$ ranging from $0$ to $2\pi$.
+    여기서 $x$의 범위는 $0$에서 $2\pi$입니다.
     {mo.as_html(plotsin(amplitude.value, period.value))}
     """
 )

@@ -1,27 +1,25 @@
 ---
-title: Plots
+title: 플롯
 marimo-version: 0.13.2
+lang: ko
 ---
 
-# Plotting
+# 플로팅
 
 ```python {.marimo hide_code="true"}
 check_dependencies()
 ```
 
-marimo supports several popular plotting libraries, including matplotlib,
-plotly, seaborn, and altair.
+marimo는 matplotlib, plotly, seaborn, altair를 포함한 여러 인기 있는 플로팅 라이브러리를 지원합니다.
 
-This tutorial gives examples using matplotlib; other libraries are
-used similarly.
+이 튜토리얼은 matplotlib를 사용한 예를 제공합니다. 다른 라이브러리도 유사하게 사용됩니다.
 <!---->
 ## Matplotlib
 <!---->
-To show a plot, include it in the last expression of a cell (just
-like any other output).
+플롯을 표시하려면 셀의 마지막 표현식에 포함합니다(다른 출력과 마찬가지로).
 
 ```python3
-# create the plot in the last line of the cell
+# 셀의 마지막 줄에 플롯 만들기
 import matplotlib.pyplot as plt
 plt.plot([1, 2])
 ```
@@ -31,17 +29,17 @@ plt.plot([1, 2])
 ```
 
 ```python3
-# create a plot
+# 플롯 만들기
 plt.plot([1, 2])
-# ... do some work ...
-# make plt.gca() the last line of the cell
+# ... 일부 작업 수행 ...
+# 셀의 마지막 줄을 plt.gca()로 만들기
 plt.gca()
 ```
 
 ```python {.marimo}
 plt.plot([1, 2])
-# ... do some work ...
-# make plt.gca() the last line of the cell
+# ... 일부 작업 수행 ...
+# 셀의 마지막 줄을 plt.gca()로 만들기
 plt.gca()
 ```
 
@@ -49,8 +47,7 @@ plt.gca()
 mo.accordion(plt_show_explainer)
 ```
 
-**A new figure every cell.** Every cell starts with an empty figure for
-the imperative `pyplot` API.
+**모든 셀에 새 그림.** 모든 셀은 명령형 `pyplot` API에 대한 빈 그림으로 시작합니다.
 
 ```python {.marimo}
 x = np.linspace(start=-4, stop=4, num=100, dtype=float)
@@ -66,8 +63,7 @@ plt.gca()
 plt.plot(x, x**3)
 ```
 
-To build a figure over multiple cells, use the object-oriented API and
-create your own axis:
+여러 셀에 걸쳐 그림을 만들려면 객체 지향 API를 사용하고 자체 축을 만듭니다.
 
 ```python {.marimo}
 _, axis = plt.subplots()
@@ -81,16 +77,16 @@ axis.plot(x, x**3)
 axis
 ```
 
-### Draw plots interactively
+### 대화형으로 플롯 그리기
 
-Draw plots interactively by parametrizing them with UI elements.
+UI 요소로 매개변수화하여 대화형으로 플롯을 그립니다.
 
 ```python {.marimo}
-exponent = mo.ui.slider(1, 5, value=1, step=1, label='exponent')
+exponent = mo.ui.slider(1, 5, value=1, step=1, label='지수')
 
 mo.md(
     f"""
-    **Visualizing powers.**
+    **거듭제곱 시각화.**
 
     {exponent}
     """
@@ -119,38 +115,34 @@ mo.md(
 )
 ```
 
-## Other libraries
+## 기타 라이브러리
 <!---->
-marimo also supports these other plotting libraries:
+marimo는 다음과 같은 다른 플로팅 라이브러리도 지원합니다.
 
 - Plotly
 - Seaborn
 - Altair
 
-Just output their figure objects as the last expression of a cell,
-or embed them in markdown with `mo.as_html`.
+그림 개체를 셀의 마지막 표현식으로 출력하거나 `mo.as_html`을 사용하여 마크다운에 포함하기만 하면 됩니다.
 
-If you would like another library to be integrated into marimo, please
-get in touch.
+다른 라이브러리를 marimo에 통합하려면 문의하십시오.
 
 ````python {.marimo hide_code="true"}
 module_not_found_explainer = mo.md(
     """
-    ## Oops!
+    ## 이런!
 
-    It looks like you're missing a package that this tutorial 
-    requires.
+    이 튜토리얼에 필요한 패키지가 누락된 것 같습니다.
 
-    Use the package manager panel on the left to install **numpy** and **matplotlib**,
-    then restart the tutorial.
+    왼쪽의 패키지 관리자 패널을 사용하여 **numpy** 및 **matplotlib**을 설치한 다음 튜토리얼을 다시 시작하십시오.
 
-    Or, if you use `uv`, open the tutorial with
+    또는 `uv`를 사용하는 경우 다음을 사용하여 튜토리얼을 엽니다.
 
     ```
     uvx marimo tutorial plots
     ```
 
-    at the command line.
+    명령줄에서.
     """
 ).callout(kind='warn')
 
@@ -161,10 +153,8 @@ def check_dependencies():
 
 ```python {.marimo hide_code="true"}
 plt_show_explainer = {
-    "Using `plt.show()`": """
-    You can use `plt.show()` or `figure.show()` to display
-    plots in the console area of a cell. Keep in mind that console
-    outputs are not shown in the app view.
+    "`plt.show()` 사용": """
+    `plt.show()` 또는 `figure.show()`를 사용하여 셀의 콘솔 영역에 플롯을 표시할 수 있습니다. 콘솔 출력은 앱 보기에 표시되지 않는다는 점에 유의하십시오.
     """
 }
 ```
